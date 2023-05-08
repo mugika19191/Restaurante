@@ -14,9 +14,11 @@
 
         <TextView
             android:id="@+id/tvTitCliente"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="47dp"
-            android:text="CARTA" />
+            android:text="                CARTA"
+            android:textColor="@color/teal_700"
+            android:textSize="35dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/carta"
