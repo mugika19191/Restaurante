@@ -4,34 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/elemento_seleccionado">
 
     <EditText
         android:id="@+id/edPass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/baseline_key_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="#6AF16A"
         android:ems="10"
         android:hint="Contraseña"
         android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.706"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.58" />
 
     <EditText
         android:id="@+id/edEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="45dp"
+        android:drawableStart="@drawable/baseline_alternate_email_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="#6AF16A"
         android:ems="10"
         android:hint="E-mail"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/edPass"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.706"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.825" />
+        app:layout_constraintVertical_bias="0.906" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -43,65 +51,63 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edPass"
-        app:layout_constraintVertical_bias="0.257" />
+        app:layout_constraintVertical_bias="0.13"
+        android:backgroundTint="#6AF16A"/>
 
     <Button
         android:id="@+id/btnRegistro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="84dp"
+        android:backgroundTint="#A1C8A1"
         android:text="REGISTRATE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.108"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-        app:layout_constraintVertical_bias="0.712" />
+        app:layout_constraintVertical_bias="0.25" />
 
     <Button
         android:id="@+id/btnInvitado"
-        android:layout_width="192dp"
-        android:layout_height="53dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="76dp"
+        android:layout_width="258dp"
+        android:layout_height="43dp"
+        android:background="@android:color/transparent"
         android:text="ACCEDE COMO INVITADO"
+        android:textColor="#6AF16A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/btnRegistro"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-        app:layout_constraintVertical_bias="0.633" />
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.888" />
 
     <TextView
-        android:id="@+id/tvNombreRestaurante"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PONER NOMBRE AL RESTAURANTE"
+        android:id="@+id/Texto1"
+        android:layout_width="352dp"
+        android:layout_height="84dp"
+        android:text="Inicia"
+        android:textColor="@color/white"
+        android:textSize="70dp"
         app:layout_constraintBottom_toTopOf="@+id/edEmail"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.474"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.184" />
 
     <TextView
-        android:id="@+id/tvEmail"
-        android:layout_width="86dp"
-        android:layout_height="31dp"
-        android:layout_marginTop="124dp"
-        android:text="E-mail"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/edEmail"
+        android:id="@+id/Texto2"
+        android:layout_width="356dp"
+        android:layout_height="86dp"
+        android:text="Sesion"
+        android:textColor="@color/white"
+        android:textSize="70dp"
+        app:layout_constraintBottom_toTopOf="@+id/edEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNombreRestaurante"
-        app:layout_constraintVertical_bias="0.006" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.615" />
 
-    <TextView
-        android:id="@+id/tvPass"
-        android:layout_width="93dp"
-        android:layout_height="29dp"
-        android:text="Contraseña"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/edPass"
-        app:layout_constraintHorizontal_bias="0.571"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
