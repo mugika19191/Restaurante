@@ -34,10 +34,9 @@ public class Carta_adapter extends RecyclerView.Adapter<Carta_adapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull Carta_adapter.MyViewHolder holder, int position) {
         holder.imagen.setImageBitmap(carta.get(position).getImagenBitMap());
-        /*holder.imagen.setMaxHeight();
-        holder.imagen.getMinimumHeight();*/
         holder.nombre.setText(carta.get(position).getNombre());
-        holder.precio.setText(carta.get(position).getPrecio().toString());
+        String formattedString = String.format("%.02f", carta.get(position).getPrecio());
+        holder.precio.setText(formattedString+"€");
     }
 
     @Override

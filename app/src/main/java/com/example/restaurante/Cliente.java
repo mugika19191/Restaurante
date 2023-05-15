@@ -98,7 +98,8 @@ public class Cliente extends AppCompatActivity {
     private void crearComidas(JSONObject elemento) throws JSONException {
         String CNombre = elemento.getString("nombre");
         String CImagen = elemento.getString("foto");
+        float precio = Float.parseFloat(elemento.getString("precio"));
         //carta
-        comidaCarta.add(new Comida(CNombre,CImagen,300.0));
+        comidaCarta.add(new Comida(CNombre,CImagen,precio));
     }
 }
