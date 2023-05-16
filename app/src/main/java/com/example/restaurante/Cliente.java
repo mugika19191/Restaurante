@@ -33,6 +33,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
     RecyclerView carta;
 
     ArrayList<Comida> comidaCarta= new ArrayList<>();
+    ArrayList<Comida> pedido= new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,21 +107,34 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
 
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(getApplicationContext(), ElementoSeleccionado.class);
-
-        intent.putExtra("Nombre",comidaCarta.get(position).getNombre());
-        intent.putExtra("User","nombreDeUsuario");//para mas adelante
-
-        startActivity(intent);
-    }
-
-    @Override
-    public void onItemLongClick(int position) {
         /*Intent intent = new Intent(getApplicationContext(), ElementoSeleccionado.class);
 
         intent.putExtra("Nombre","Se va ha editar");
 
         startActivity(intent);*/
         //////HAY QUE PONER UN ACTIVITY PARA EDITAR EL ELEMENTO SELECCIONADO/////////
+        boolean found=false;
+        String nombre = comidaCarta.get(position).getNombre();
+        for(int i=0;i<pedido.size() && !found;i++){
+            if (pedido.get(i).getNombre().equals(nombre)){
+                found = true;
+            }
+        }
+        if (!found){
+            pedido.add(comidaCarta.get(position));
+            pedir.setText("PEDIR ("+pedido.size()+")");
+            Toast.makeText(Cliente.this,"Se ha añadido.",Toast.LENGTH_SHORT).show();
+        }
+        //Toast.makeText(Cliente.this,pedido.size(),Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onItemLongClick(int position) {
+        Intent intent = new Intent(getApplicationContext(), ElementoSeleccionado.class);
+
+        intent.putExtra("Nombre",comidaCarta.get(position).getNombre());
+        intent.putExtra("User","nombreDeUsuario");//para mas adelante
+
+        startActivity(intent);
+        }
 }
