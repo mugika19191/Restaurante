@@ -46,6 +46,7 @@ public class ElementoSeleccionado extends AppCompatActivity {
         foto.setImageBitmap(decodedByte);*/
     }
     private void loadImage(){
+        //obtener los datos correspondientes al elemento seleccionado
         String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_element.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
@@ -58,7 +59,7 @@ public class ElementoSeleccionado extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
 
-                    byte[] decodedString = new byte[0];
+                    byte[] decodedString = new byte[0];//String-->Image
                     try {
                         decodedString = Base64.decode(obj.getString("foto"), Base64.DEFAULT);
                     } catch (JSONException e) {
@@ -76,6 +77,7 @@ public class ElementoSeleccionado extends AppCompatActivity {
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                //añadir elementos para realizar la consulta
                 Map<String,String> parametros= new HashMap<String,String>();
                 parametros.put("nombre",nombre.getText().toString());
                 return parametros;

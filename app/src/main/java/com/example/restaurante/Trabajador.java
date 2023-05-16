@@ -17,7 +17,6 @@ public class Trabajador extends AppCompatActivity {
         setContentView(R.layout.trabajador);
         logout = findViewById(R.id.btnLogoutTrabajador);
 
-
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

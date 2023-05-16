@@ -21,6 +21,7 @@ public class Carta_adapter extends RecyclerView.Adapter<Carta_adapter.MyViewHold
     ArrayList<Comida> carta;
 
     public Carta_adapter(Context context, ArrayList<Comida> carta,RecycleviewInterface recycleviewInt){
+        // constructor
         this.carta = carta;
         this.context = context;
         this.recycleviewInterface=recycleviewInt;
@@ -43,7 +44,7 @@ public class Carta_adapter extends RecyclerView.Adapter<Carta_adapter.MyViewHold
 
     @Override
     public int getItemCount() {
-
+        //obtener el tamaño
         return this.carta.size();
     }
 
@@ -64,7 +65,6 @@ public class Carta_adapter extends RecyclerView.Adapter<Carta_adapter.MyViewHold
                 public void onClick(View view) {
                     if (recycleviewInt != null){
                         int pos = getAdapterPosition();
-
                         if (pos != RecyclerView.NO_POSITION){
                             recycleviewInt.onItemClick(pos);
                         }
@@ -77,7 +77,6 @@ public class Carta_adapter extends RecyclerView.Adapter<Carta_adapter.MyViewHold
                 public boolean onLongClick(View view) {
                     if (recycleviewInt != null){
                         int pos = getAdapterPosition();
-
                         if (pos != RecyclerView.NO_POSITION){
                             recycleviewInt.onItemLongClick(pos);
                         }

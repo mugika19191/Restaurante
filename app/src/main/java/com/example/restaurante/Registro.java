@@ -85,7 +85,7 @@ public class Registro extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(!response.isEmpty()){
+                if(!response.isEmpty()){    //comprueba que no haya ningún usuario con el correo insertado
                     Toast.makeText(Registro.this,"Ya existe un usuario con es correo.",Toast.LENGTH_SHORT).show();
                 }else{
                     insertarUsuario();
@@ -99,6 +99,7 @@ public class Registro extends AppCompatActivity {
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                // inserta los parametros necesario para realizar la consulta
                 Map<String,String> parametros= new HashMap<String,String>();
                 parametros.put("email",email.getText().toString());
                 return parametros;

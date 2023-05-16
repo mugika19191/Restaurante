@@ -63,6 +63,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
     }
 
     private void cargarCarta(){
+        //obtener la carta
         String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_carta.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
@@ -98,6 +99,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
     }
 
     private void crearComidas(JSONObject elemento) throws JSONException {
+        // crea los elementos (comida) y los adjunta en un ArrayList
         String CNombre = elemento.getString("nombre");
         String CImagen = elemento.getString("foto");
         float precio = Float.parseFloat(elemento.getString("precio"));
@@ -113,6 +115,8 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
 
         startActivity(intent);*/
         //////HAY QUE PONER UN ACTIVITY PARA EDITAR EL ELEMENTO SELECCIONADO/////////
+
+        //actividad que realizará la carta seleccionada
         boolean found=false;
         String nombre = comidaCarta.get(position).getNombre();
         for(int i=0;i<pedido.size() && !found;i++){
@@ -131,10 +135,9 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
     @Override
     public void onItemLongClick(int position) {
         Intent intent = new Intent(getApplicationContext(), ElementoSeleccionado.class);
-
+        //pasar valores a ElementoSeleccionado
         intent.putExtra("Nombre",comidaCarta.get(position).getNombre());
-        intent.putExtra("User","nombreDeUsuario");//para mas adelante
-
+        intent.putExtra("User","nombreDeUsuario");//para más adelante
         startActivity(intent);
         }
 }

@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(!response.isEmpty()){
+                if(!response.isEmpty()){    //comprueba si el usuario y contraseña son correctas
                     Intent intent = new Intent(getApplicationContext(), Cliente.class);
                     startActivity(intent);
                 }else{
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                //Mete los parametros para el php
                 Map<String,String> parametros= new HashMap<String,String>();
                 parametros.put("email",email.getText().toString());
                 parametros.put("pass",pass.getText().toString());

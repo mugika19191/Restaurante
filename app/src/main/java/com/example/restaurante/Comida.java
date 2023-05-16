@@ -5,8 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 public class Comida {
-    String nombre;
-    String imagen;
+    String nombre, imagen;
     double precio;
 
     public Comida(String nombre, String imagen, double precio) {
@@ -24,6 +23,7 @@ public class Comida {
         return this.precio;
     }
     public Bitmap getImagenBitMap(){
+        //obtener las fotos
         byte[] decodedString = Base64.decode(this.imagen, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         return decodedByte;
