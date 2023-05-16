@@ -16,19 +16,21 @@ import java.util.ArrayList;
 
 public class Carta_adapter extends RecyclerView.Adapter<Carta_adapter.MyViewHolder> {
 
+    private final RecycleviewInterface recycleviewInterface;
     Context context;
     ArrayList<Comida> carta;
 
-    public Carta_adapter(Context context, ArrayList<Comida> carta){
+    public Carta_adapter(Context context, ArrayList<Comida> carta,RecycleviewInterface recycleviewInt){
         this.carta = carta;
         this.context = context;
+        this.recycleviewInterface=recycleviewInt;
     }
     @NonNull
     @Override
     public Carta_adapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.elemento_carta,parent,false);
-        return new Carta_adapter.MyViewHolder(view);
+        return new Carta_adapter.MyViewHolder(view,recycleviewInterface);
     }
 
     @Override
@@ -50,12 +52,39 @@ public class Carta_adapter extends RecyclerView.Adapter<Carta_adapter.MyViewHold
         ImageView imagen;
         TextView nombre,precio;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, RecycleviewInterface recycleviewInt) {
             super(itemView);
 
             imagen = itemView.findViewById(R.id.fotoCarta);
             nombre = itemView.findViewById(R.id.NombreCarta);
             precio = itemView.findViewById(R.id.precioCarta);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (recycleviewInt != null){
+                        int pos = getAdapterPosition();
+
+                        if (pos != RecyclerView.NO_POSITION){
+                            recycleviewInt.onItemClick(pos);
+                        }
+                    }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (recycleviewInt != null){
+                        int pos = getAdapterPosition();
+
+                        if (pos != RecyclerView.NO_POSITION){
+                            recycleviewInt.onItemLongClick(pos);
+                        }
+                    }
+                    return true;
+                }
+            });
         }
     }
 }

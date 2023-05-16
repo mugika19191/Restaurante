@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/elemento_seleccionado">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="356dp"
+        android:layout_height="95dp"
+        android:text="Ingredientes"
+        android:textColor="@color/white"
+        android:textSize="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.474"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.071" />/>
+
+    <ImageView
+        android:id="@+id/ImagenElemento"
+        android:layout_width="203dp"
+        android:layout_height="210dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.254"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/NombreElemento"
+        android:layout_width="99dp"
+        android:layout_height="39dp"
+        android:text="Arroz Al Curry"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.524" />
+
+    <TextView
+        android:id="@+id/DescElemento"
+        android:layout_width="326dp"
+        android:layout_height="265dp"
+        android:text="Nadie pasa de esta esquina
+Aquí mandan las divinas
+Porque somos gasolina
+Gasolina de verdad
+Todos saben quien manda en esta school
+Porque nosotras somos gente cool
+Gente que siente con sangre caliente
+Que quiere hacerse oír
+Sea como sea, aquí no entran feas
+Pa' que lo veas te voy a mostrar
+Mira esa fea, aquí hay otra fea
+Aquí no pueden entrar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.905" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

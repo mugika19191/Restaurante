@@ -27,8 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Cliente extends AppCompatActivity {
-
+public class Cliente extends AppCompatActivity implements RecycleviewInterface{
+    Carta_adapter adapter;
     Button pedir, logout;
     RecyclerView carta;
 
@@ -41,7 +41,7 @@ public class Cliente extends AppCompatActivity {
         pedir = findViewById(R.id.btnPedirCliente);
         logout = findViewById(R.id.btnLogoutCliente);
         carta = findViewById(R.id.carta);
-
+        adapter = new Carta_adapter(this,comidaCarta,this);
         cargarCarta();
 
         pedir.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +79,8 @@ public class Cliente extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                     //list.add(arr.getJSONObject(i).getString("nombre"));
-                    Carta_adapter adapter = new Carta_adapter(getApplicationContext(),comidaCarta);
+                    //Carta_adapter adapter = new Carta_adapter(getApplicationContext(),comidaCarta,this);
+                    adapter.notifyDataSetChanged();
                     carta.setAdapter(adapter);
                     carta.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 }
@@ -101,5 +102,25 @@ public class Cliente extends AppCompatActivity {
         float precio = Float.parseFloat(elemento.getString("precio"));
         //carta
         comidaCarta.add(new Comida(CNombre,CImagen,precio));
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(getApplicationContext(), ElementoSeleccionado.class);
+
+        intent.putExtra("Nombre",comidaCarta.get(position).getNombre());
+        intent.putExtra("User","nombreDeUsuario");//para mas adelante
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
+        /*Intent intent = new Intent(getApplicationContext(), ElementoSeleccionado.class);
+
+        intent.putExtra("Nombre","Se va ha editar");
+
+        startActivity(intent);*/
+        //////HAY QUE PONER UN ACTIVITY PARA EDITAR EL ELEMENTO SELECCIONADO/////////
     }
 }
