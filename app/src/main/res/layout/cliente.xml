@@ -15,7 +15,7 @@
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="2"
-        android:text="CARTA"
+        android:text="@string/cartaTit"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="60dp"
@@ -41,9 +41,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="PEDIR (0)"
-        android:drawableBottom="@drawable/carro"
         android:backgroundTint="#6AF16A"
+        android:drawableBottom="@drawable/baseline_shopping_cart_24"
+        android:text="@string/carro"
         app:layout_constraintBottom_toTopOf="@+id/btnLogoutCliente"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -53,10 +53,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="LOG OUT"
         android:backgroundTint="#A1C8A1"
+        android:text="@string/salir"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="199dp"
+        android:layout_height="32dp"
+        android:entries="@array/idiomas"
+        app:layout_constraintBottom_toTopOf="@+id/carta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.924"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitCliente"
+        app:layout_constraintVertical_bias="0.53" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,16 @@
 package com.example.restaurante;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,39 +32,60 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class Cliente extends AppCompatActivity implements RecycleviewInterface{
     Carta_adapter adapter;
     Button pedir, logout;
     RecyclerView carta;
+    ArrayList<Comida> comidaCarta, pedido;
+    Spinner idiomas;
 
-    ArrayList<Comida> comidaCarta= new ArrayList<>();
-    ArrayList<Comida> pedido= new ArrayList<>();
+    TextView tit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cliente);
 
+        comidaCarta= new ArrayList<>();
+        pedido= new ArrayList<>();
+
         pedir = findViewById(R.id.btnPedirCliente);
+        pedir.setText(getString(R.string.carro) +"("+pedido.size()+")");
         logout = findViewById(R.id.btnLogoutCliente);
         carta = findViewById(R.id.carta);
         adapter = new Carta_adapter(this,comidaCarta,this);
         cargarCarta();
+        idiomas= findViewById(R.id.spinner2);
+        tit= findViewById(R.id.tvTitCliente);
 
         pedir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PedirCliente.class);
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), PedirCliente.class));
             }
         });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        });
+
+        idiomas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != 0) {   //si ha escogido un idioma
+                    String idioma = adapterView.getItemAtPosition(i).toString();  //obtiene el valor escogido
+                    cambiarIdioma(idioma);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }
@@ -139,5 +167,26 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
         intent.putExtra("Nombre",comidaCarta.get(position).getNombre());
         intent.putExtra("User","nombreDeUsuario");//para más adelante
         startActivity(intent);
-        }
+    }
+
+    private void cambiarIdioma(String idioma){
+        Locale nuevaloc = new Locale(idioma);
+        Locale.setDefault(nuevaloc);
+        Resources resources= getBaseContext().getResources();
+        Configuration configuration =resources.getConfiguration();
+        configuration.setLocale(nuevaloc);
+        configuration.setLayoutDirection(nuevaloc);
+        Context context = getBaseContext().createConfigurationContext(configuration);
+        resources.updateConfiguration(configuration, context.getResources().getDisplayMetrics());
+        actualizar();
+    }
+
+    private void actualizar(){
+        pedir.setText(getString(R.string.carro)+"("+pedido.size()+")");
+        logout.setText(R.string.salir);
+        ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(this, R.array.idiomas ,
+                android.R.layout.simple_spinner_item);
+        idiomas.setAdapter(adapter);
+        tit.setText(R.string.cartaTit);
+    }
 }

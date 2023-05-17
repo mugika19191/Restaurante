@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Restaurante</string>
+    <string name="inicioTit">Sarbide</string>
+    <string name="sesionTit"> aukera </string>
+    <string name="regTit1">Erabiltzaileen</string>
+    <string name="regTit2">erregistroa</string>
+    <string name="email">E-mail</string>
+    <string name="contraseña">Pasahitza</string>
+    <string name="inicioBut">SAIOA HASI</string>
+    <string name="registroBut">ERREGISTRATU</string>
+    <string name="invitadoBut">GONBIDATU MODUAN SARTU</string>
+    <string-array name="idiomas">
+        <item> Hizkuntza </item>
+        <item> eu </item>
+        <item> es </item>
+        <item> en </item>
+        <item> </item>
+    </string-array>
+    <string name="cartaTit">MENU</string>
+    <string name="carro">ESKATU </string>
+    <string name="salir">ITXI SAIOA</string>
+    <string name="cancelar">DEUSEZTATU</string>
+    <string name="ingr">Osagaiak</string>
+</resources>

@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Restaurante</string>
+    <string name="inicioTit">Log</string>
+    <string name="sesionTit"> in </string>
+    <string name="regTit1">User's</string>
+    <string name="regTit2">register</string>
+    <string name="email">E-mail</string>
+    <string name="contraseña">Password</string>
+    <string name="inicioBut">LOG IN</string>
+    <string name="registroBut">SIGN IN</string>
+    <string name="invitadoBut">SIGN AS GUEST</string>
+    <string-array name="idiomas">
+        <item> Language </item>
+        <item> eu </item>
+        <item> es </item>
+        <item> en </item>
+        <item> </item>
+    </string-array>
+    <string name="cartaTit">MENU</string>
+    <string name="carro">ORDER </string>
+    <string name="salir">LOG OUT</string>
+    <string name="cancelar">CANCEL</string>
+    <string name="ingr">Ingredients</string>
 </resources>

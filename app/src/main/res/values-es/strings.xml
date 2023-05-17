@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Restaurante</string>
+    <string name="inicioTit">Inicia</string>
+    <string name="sesionTit">sesión </string>
+    <string name="regTit1">Registro</string>
+    <string name="regTit2">de usuario</string>
+    <string name="email">E-mail</string>
+    <string name="contraseña">Contraseña</string>
+    <string name="inicioBut">INICIAR SESIÓN</string>
+    <string name="registroBut">REGISTRATE</string>
+    <string name="invitadoBut">ACCEDE COMO INVITADO</string>
+    <string-array name="idiomas">
+        <item> Idioma </item>
+        <item> eu </item>
+        <item> es </item>
+        <item> en </item>
+        <item> </item>
+    </string-array>
+    <string name="cartaTit">CARTA</string>
+    <string name="carro">PEDIR </string>
+    <string name="salir">CERRAR SESIÓN</string>
+    <string name="cancelar">CANCELAR</string>
+    <string name="ingr">Ingredientes</string>
+</resources>
