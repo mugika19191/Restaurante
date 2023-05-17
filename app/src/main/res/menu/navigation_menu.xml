@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menuProfile"
+        android:icon="@drawable/baseline_alternate_email_24"
+        android:title="Perfil" />
+    <item android:title="Opciones">
+        <menu>
+            <item
+                android:id="@+id/Idioma"
+                android:icon="@drawable/carta"
+                android:title="Idioma" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/logOut"
+        android:icon="@drawable/baseline_key_24"
+        android:title="Cerrar Sesion" />
+
+</menu>

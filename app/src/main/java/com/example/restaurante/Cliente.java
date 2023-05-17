@@ -5,15 +5,20 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,13 +41,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class Cliente extends AppCompatActivity implements RecycleviewInterface{
+public class Cliente extends AppCompatActivity implements RecycleviewInterface,NavigationView.OnNavigationItemSelectedListener{
     Carta_adapter adapter;
     Button pedir, logout;
     RecyclerView carta;
     ArrayList<Comida> comidaCarta, pedido;
     Spinner idiomas;
+    DrawerLayout drawerLayout;
 
+    NavigationView navigationView;
+    ImageView iconoMen;
     TextView tit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +64,9 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
         pedir.setText(getString(R.string.carro) +"("+pedido.size()+")");
         logout = findViewById(R.id.btnLogoutCliente);
         carta = findViewById(R.id.carta);
+        iconoMen=findViewById(R.id.iconoMenu);
+        drawerLayout = findViewById(R.id.drawerLayout);
+        navigationView = findViewById(R.id.navigationView);
         adapter = new Carta_adapter(this,comidaCarta,this);
         cargarCarta();
         idiomas= findViewById(R.id.spinner2);
@@ -73,7 +85,12 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
-
+        iconoMen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
         idiomas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -88,6 +105,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
 
             }
         });
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void cargarCarta(){
@@ -114,7 +132,6 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
                     carta.setAdapter(adapter);
                     carta.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 }
-                Toast.makeText(Cliente.this,"Response: " + response.toString(),Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -188,5 +205,14 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface{
                 android.R.layout.simple_spinner_item);
         idiomas.setAdapter(adapter);
         tit.setText(R.string.cartaTit);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.logOut:
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }
+        return true;
     }
 }

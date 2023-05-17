@@ -2,7 +2,7 @@
     <string name="app_name">Restaurante</string>
     <string name="inicioTit">Log</string>
     <string name="sesionTit"> in </string>
-    <string name="regTit1">User's</string>
+    <string name="regTit1">User\'s</string>
     <string name="regTit2">register</string>
     <string name="email">E-mail</string>
     <string name="contraseña">Password</string>
