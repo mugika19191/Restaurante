@@ -48,7 +48,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
     ArrayList<Comida> comidaCarta, pedido;
     Spinner idiomas;
     DrawerLayout drawerLayout;
-
+    View headerView;
     NavigationView navigationView;
     ImageView iconoMen;
     TextView tit;
@@ -67,11 +67,12 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
         iconoMen=findViewById(R.id.iconoMenu);
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
+        navigationView.setItemIconTintList(null);
         adapter = new Carta_adapter(this,comidaCarta,this);
         cargarCarta();
         idiomas= findViewById(R.id.spinner2);
         tit= findViewById(R.id.tvTitCliente);
-
+        loadMenuData();
         pedir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,6 +106,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
 
             }
         });
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -212,7 +214,18 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
         switch(item.getItemId()){
             case R.id.logOut:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+                break;
+            case R.id.menuProfile:
+                startActivity(new Intent(getApplicationContext(), DatosUsuario.class));
+                break;
         }
         return true;
+    }
+
+    private void loadMenuData(){
+        headerView = navigationView.getHeaderView(0);
+        TextView navUsername = (TextView) headerView.findViewById(R.id.nombreUsuario);
+        navUsername.setText(getIntent().getStringExtra("email"));
     }
 }

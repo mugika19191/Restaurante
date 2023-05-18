@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 if(!response.isEmpty()){    //comprueba si el usuario y contraseña son correctas
                     Intent intent = new Intent(getApplicationContext(), Cliente.class);
+                    intent.putExtra("email",email.getText().toString());
                     startActivity(intent);
                 }else{
                     Toast.makeText(MainActivity.this,"Contraseña o email incorrectos.",Toast.LENGTH_SHORT).show();

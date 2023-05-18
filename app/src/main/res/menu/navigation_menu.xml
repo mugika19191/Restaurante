@@ -2,19 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menuProfile"
-        android:icon="@drawable/baseline_alternate_email_24"
+        android:icon="@drawable/tarjeta_de_identificacion"
         android:title="Perfil" />
-    <item android:title="Opciones">
+    <item android:title="Opciones"
+        android:icon="@drawable/preferencias">
         <menu>
             <item
                 android:id="@+id/Idioma"
-                android:icon="@drawable/carta"
+                android:icon="@drawable/traducir"
                 android:title="Idioma" />
         </menu>
     </item>
     <item
         android:id="@+id/logOut"
-        android:icon="@drawable/baseline_key_24"
+        android:icon="@drawable/cerrar_sesion"
         android:title="Cerrar Sesion" />
 
 </menu>

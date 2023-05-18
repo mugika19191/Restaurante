@@ -38,6 +38,10 @@
             android:name=".ElementoSeleccionado"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".DatosUsuario"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
