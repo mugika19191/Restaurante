@@ -8,6 +8,7 @@
     <string name="contraseña">Contraseña</string>
     <string name="inicioBut">INICIAR SESIÓN</string>
     <string name="registroBut">REGISTRATE</string>
+    <string name="recBut"> RECUPERAR </string>
     <string name="invitadoBut">ACCEDE COMO INVITADO</string>
     <string-array name="idiomas">
         <item> Idioma </item>
@@ -22,4 +23,7 @@
     <string name="cancelar">CANCELAR</string>
     <string name="ingr">Ingredientes</string>
     <string name="userTitle">Informacion de Usuario</string>
+    <string name="recuperar">¿Olvidaste la contraseña?</string>
+    <string name="recTit1">Recuperar</string>
+    <string name="recTit2">contraseña</string>
 </resources>

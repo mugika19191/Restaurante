@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+
+    <LinearLayout
+        android:layout_width="352dp"
+        android:layout_height="371dp"
+        android:background="@drawable/elemento_seleccionado"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498"><![CDATA[>
+
+
+
+
+
+        ]]>
+
+        <TextView
+            android:id="@+id/Texto1"
+            android:layout_width="356dp"
+            android:layout_height="95dp"
+            android:text="@string/recTit1"
+            android:textColor="@color/white"
+            android:textSize="70dp" />
+
+        <TextView
+            android:id="@+id/Texto2"
+            android:layout_width="match_parent"
+            android:layout_height="79dp"
+            android:text="@string/recTit2"
+            android:textColor="@color/white"
+            android:textSize="70dp" />
+
+        <EditText
+            android:id="@+id/edEmailRec"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:drawableStart="@drawable/baseline_alternate_email_24"
+            android:drawablePadding="10dp"
+            android:drawableTint="#6AF16A"
+            android:ems="10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+
+        <Button
+            android:id="@+id/btnRec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#6AF16A"
+            android:text="@string/recBut" />
+
+        <Button
+            android:id="@+id/btnCancelRec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#A1C8A1"
+            android:text="@string/cancelar" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

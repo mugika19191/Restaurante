@@ -8,6 +8,7 @@
     <string name="contraseña">Password</string>
     <string name="inicioBut">LOG IN</string>
     <string name="registroBut">SIGN IN</string>
+    <string name="recBut"> RECOVER </string>
     <string name="invitadoBut">SIGN AS GUEST</string>
     <string-array name="idiomas">
         <item> Language </item>
@@ -22,4 +23,7 @@
     <string name="cancelar">CANCEL</string>
     <string name="ingr">Ingredients</string>
     <string name="userTitle">User Info</string>
+    <string name="recuperar">Do you forget the password?</string>
+    <string name="recTit1">Recover</string>
+    <string name="recTit2">password</string>
 </resources>

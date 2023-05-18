@@ -1,5 +1,7 @@
 package com.example.restaurante;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -7,6 +9,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,8 +26,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -34,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     Button inicio_sesion, registrar, invitado;
     EditText pass, email;
     Spinner idiomas;
-    TextView tit1,tit2;
+    TextView tit1,tit2, forget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +49,11 @@ public class MainActivity extends AppCompatActivity {
         registrar = findViewById(R.id.btnRegistro);
         invitado = findViewById(R.id.btnInvitado);
         pass = findViewById(R.id.edPass);
-        email = findViewById(R.id.edEmail);
+        email = findViewById(R.id.edEmailRec);
         idiomas= findViewById(R.id.spinner);
         tit1=findViewById(R.id.Texto1);
         tit2=findViewById(R.id.Texto2);
+        forget=findViewById(R.id.TextRecupContr);
 
         inicio_sesion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +93,43 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        forget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this,"entra.",Toast.LENGTH_SHORT).show();
+                //Llamar a alerta personalizada, donde se introduce el correo
+                AlertDialog.Builder al = new AlertDialog.Builder(MainActivity.this);
+                LayoutInflater in = getLayoutInflater();
+                View vi = in.inflate(R.layout.recup_cont, null);
+                al.setView(vi);
+
+                Button recBut= (Button) vi.findViewById(R.id.btnRec);
+                Button cancelarBut= (Button) vi.findViewById(R.id.btnCancelRec);
+
+                AlertDialog dialogo= al.create();
+                dialogo.show();
+                recBut.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EditText email=vi.findViewById(R.id.edEmailRec);
+                        String email1=email.getText().toString().trim();
+                        if (!email1.isEmpty()){
+                            mandarContraseña(email.getText().toString().trim());
+                        }
+                        dialogo.cancel();
+                    }
+                });
+
+                cancelarBut.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogo.cancel();
+                    }
+                });
+
 
             }
         });
@@ -146,4 +189,25 @@ public class MainActivity extends AppCompatActivity {
         tit1.setText(R.string.inicioTit);
         tit2.setText(R.string.sesionTit);
     }
+
+    private void mandarContraseña(String email){
+        if (comprobarCorreoExiste(email)){
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            auth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Toast.makeText(MainActivity.this, "Correo enviado",Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+        }
+    }
+
+    private boolean comprobarCorreoExiste(String email) {
+        return true;
+    }
+
 }
