@@ -217,7 +217,9 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
                 finish();
                 break;
             case R.id.menuProfile:
-                startActivity(new Intent(getApplicationContext(), DatosUsuario.class));
+                Intent intent = new Intent(getApplicationContext(),DatosUsuario.class);
+                intent.putExtra("email",getIntent().getStringExtra("email"));
+                startActivity(intent);
                 break;
         }
         return true;

@@ -31,14 +31,14 @@ public class DatosUsuario extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.info_elemento);
+        setContentView(R.layout.info_usuario);
 
         nombre = findViewById(R.id.NombreElemento);
-        foto = findViewById(R.id.ImagenElemento);
+        foto = findViewById(R.id.ImagenUsuario);
 
-        nombre.setText(getIntent().getStringExtra("Nombre"));
+        nombre.setText(getIntent().getStringExtra("email"));
 
-        loadImage();
+        //loadImage();
         /*
         foto.setImageBitmap(decodedByte);*/
     }
