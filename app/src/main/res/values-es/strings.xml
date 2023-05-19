@@ -26,4 +26,7 @@
     <string name="recuperar">¿Olvidaste la contraseña?</string>
     <string name="recTit1">Recuperar</string>
     <string name="recTit2">contraseña</string>
+    <string name="contr6">Contraseña minimo 6 caracteres.</string>
+    <string name="vacio">Rellena todos los apartados.</string>
+    <string name="regCorrecto">Registro completado.</string>
 </resources>

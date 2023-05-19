@@ -26,4 +26,7 @@
     <string name="recuperar">Do you forget the password?</string>
     <string name="recTit1">Recover</string>
     <string name="recTit2">password</string>
+    <string name="contr6">Password must be at least 6 characters long.</string>
+    <string name="vacio">Complete all sections.</string>
+    <string name="regCorrecto">Register done.</string>
 </resources>

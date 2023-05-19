@@ -28,7 +28,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     EditText pass, email;
     Spinner idiomas;
     TextView tit1,tit2, forget;
+    String idioma;
+
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         tit1=findViewById(R.id.Texto1);
         tit2=findViewById(R.id.Texto2);
         forget=findViewById(R.id.TextRecupContr);
+        idioma=Locale.getDefault().getDisplayLanguage();
+        auth=FirebaseAuth.getInstance();
 
         inicio_sesion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {   //si ha escogido un idioma
-                    String idioma = adapterView.getItemAtPosition(i).toString();  //obtiene el valor escogido
+                    idioma = adapterView.getItemAtPosition(i).toString();  //obtiene el valor escogido
                     cambiarIdioma(idioma);
                 }
             }
@@ -99,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         forget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this,"entra.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,idioma,Toast.LENGTH_LONG).show();
                 //Llamar a alerta personalizada, donde se introduce el correo
                 AlertDialog.Builder al = new AlertDialog.Builder(MainActivity.this);
                 LayoutInflater in = getLayoutInflater();
@@ -134,8 +141,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void iniciarSesion(){
-        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/validar_usuario.php";
+      /*  String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/validar_usuario.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -163,7 +171,20 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         RequestQueue requestQue= Volley.newRequestQueue(this);
-        requestQue.add(stringRequest);
+        requestQue.add(stringRequest);*/
+        auth.signInWithEmailAndPassword(email.getText().toString(),pass.getText().toString() )
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Toast.makeText(MainActivity.this, "signInWithEmail:success", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), Cliente.class);
+                            intent.putExtra("email",email.getText().toString());
+                            startActivity(intent);
+                        }
+                    }
+                });
     }
 
     private void cambiarIdioma(String idioma){
@@ -191,23 +212,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mandarContraseña(String email){
-        if (comprobarCorreoExiste(email)){
-            FirebaseAuth auth = FirebaseAuth.getInstance();
-            auth.sendPasswordResetEmail(email)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Toast.makeText(MainActivity.this, "Correo enviado",Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this,"Fire",Toast.LENGTH_SHORT).show();
+       // if (comprobarCorreoExiste(email)){
+        auth.setLanguageCode(idioma);
+        auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+                            Toast.makeText(MainActivity.this, "Correo enviado",Toast.LENGTH_LONG).show();
 
-                            }
                         }
-                    });
-        }
+                    }
+
+                });
     }
 
-    private boolean comprobarCorreoExiste(String email) {
+   /* private boolean comprobarCorreoExiste(String email) {
         return true;
-    }
+    }*/
 
 }

@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +18,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,10 +43,16 @@ public class Registro extends AppCompatActivity {
         registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!email.getText().toString().isEmpty() && !pass.getText().toString().isEmpty()){
+                if(!email.getText().toString().isEmpty() && !pass.getText().toString().isEmpty()
+                && pass.length()>=6){
                     existeUsuario();
                 }else{
-                    Toast.makeText(Registro.this,"Rellena todos los apartados.",Toast.LENGTH_SHORT).show();
+                    if (pass.length()<6){
+                        Toast.makeText(Registro.this,R.string.contr6,Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(Registro.this,R.string.vacio,Toast.LENGTH_SHORT).show();
+                    }
+
                 }
             }
         });
@@ -58,7 +70,33 @@ public class Registro extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(Registro.this,"Registro completado.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(Registro.this,R.string.regCorrecto,Toast.LENGTH_SHORT).show();
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+         //       DatabaseReference dataBase = auth.getReference();
+                auth.createUserWithEmailAndPassword(email.getText().toString(),pass.getText().toString() )
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()){
+           //                        DatabaseReference  dataBase= auth.
+                                    FirebaseAuth auth = FirebaseAuth.getInstance();
+                                    FirebaseUser user = auth.getCurrentUser();
+
+                                    user.sendEmailVerification()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(Registro.this, "creada cuenta", Toast.LENGTH_SHORT).show();
+                                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                        startActivity(intent);
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        });
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -73,7 +111,6 @@ public class Registro extends AppCompatActivity {
                 parametros.put("nombre","");
                 parametros.put("apellido","");
                 parametros.put("pass",pass.getText().toString());
-
                 return parametros;
             }
         };

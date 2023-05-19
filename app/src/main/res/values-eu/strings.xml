@@ -8,6 +8,7 @@
     <string name="contraseña">Pasahitza</string>
     <string name="inicioBut">SAIOA HASI</string>
     <string name="registroBut">ERREGISTRATU</string>
+    <string name="recBut"> BERRESKURATU </string>
     <string name="invitadoBut">GONBIDATU MODUAN SARTU</string>
     <string-array name="idiomas">
         <item> Hizkuntza </item>
@@ -22,4 +23,10 @@
     <string name="cancelar">DEUSEZTATU</string>
     <string name="ingr">Osagaiak</string>
     <string name="userTitle">Erabiltzaile Informazioa</string>
+    <string name="recuperar">Pasahitza ahaztu duzu?</string>
+    <string name="recTit1">Pasahitza</string>
+    <string name="recTit2">berreskuratu</string>
+    <string name="contr6">Pasahitzak 6 karaktere izan behar ditu gutxienez</string>
+    <string name="vacio">Bete itzazu atal guztiak</string>
+    <string name="regCorrecto">Erregistroa egina.</string>
 </resources>
