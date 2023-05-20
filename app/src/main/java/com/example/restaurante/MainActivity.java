@@ -221,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()){
                             Toast.makeText(MainActivity.this, "Correo enviado",Toast.LENGTH_LONG).show();
-
                         }
                     }
 
