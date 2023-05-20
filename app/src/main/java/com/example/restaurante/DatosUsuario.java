@@ -33,7 +33,7 @@ public class DatosUsuario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info_usuario);
 
-        nombre = findViewById(R.id.NombreElemento);
+        nombre = findViewById(R.id.nombreUsuario);
         foto = findViewById(R.id.ImagenUsuario);
 
         nombre.setText(getIntent().getStringExtra("email"));

@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ElementoSeleccionado extends AppCompatActivity {
-    TextView nombre;
+    TextView nombre,desc;
     ImageView foto;
 
     @Override
@@ -38,7 +38,7 @@ public class ElementoSeleccionado extends AppCompatActivity {
 
         nombre = findViewById(R.id.NombreElemento);
         foto = findViewById(R.id.ImagenElemento);
-
+        desc = findViewById(R.id.DescElemento);
         nombre.setText(getIntent().getStringExtra("Nombre"));
 
         loadImage();
@@ -61,6 +61,7 @@ public class ElementoSeleccionado extends AppCompatActivity {
 
                     byte[] decodedString = new byte[0];//String-->Image
                     try {
+                    desc.setText(obj.getString("ingre"));
                         decodedString = Base64.decode(obj.getString("foto"), Base64.DEFAULT);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
