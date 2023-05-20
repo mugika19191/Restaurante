@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="388dp"
-        android:layout_height="115dp"
+        android:layout_width="338dp"
+        android:layout_height="103dp"
         android:text="@string/userTitle"
         android:textColor="@color/white"
         android:textSize="40dp"

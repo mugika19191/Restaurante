@@ -4,6 +4,10 @@
         android:id="@+id/menuProfile"
         android:icon="@drawable/tarjeta_de_identificacion"
         android:title="Perfil" />
+    <item
+        android:id="@+id/mapa"
+        android:icon="@drawable/maps_and_location"
+        android:title="Localizacion" />
     <item android:title="Opciones"
         android:icon="@drawable/preferencias">
         <menu>
