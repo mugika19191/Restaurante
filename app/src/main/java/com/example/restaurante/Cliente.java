@@ -221,6 +221,9 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
                 intent.putExtra("email",getIntent().getStringExtra("email"));
                 startActivity(intent);
                 break;
+            case R.id.mapa:
+                startActivity(new Intent(getApplicationContext(), Mapa.class));
+                break;
         }
         return true;
     }
