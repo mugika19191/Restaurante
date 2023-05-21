@@ -110,7 +110,6 @@ public class Registro extends AppCompatActivity {
                 parametros.put("email",email.getText().toString());
                 parametros.put("nombre","");
                 parametros.put("apellido","");
-                parametros.put("pass",pass.getText().toString());
                 return parametros;
             }
         };
