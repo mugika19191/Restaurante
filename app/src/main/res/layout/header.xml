@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:padding="20dp">
 
-    <com.makeramen.roundedimageview.RoundedImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/fotoPerfil"
         android:layout_width="54dp"
         android:layout_height="53dp"
@@ -14,7 +14,7 @@
         android:layout_marginTop="4dp"
         android:src="@drawable/hombre"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></com.makeramen.roundedimageview.RoundedImageView>
+        app:layout_constraintTop_toTopOf="parent"></de.hdodenhof.circleimageview.CircleImageView>
 
     <TextView
         android:id="@+id/nombreUsuario"

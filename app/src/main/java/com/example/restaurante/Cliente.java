@@ -2,9 +2,13 @@ package com.example.restaurante;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -108,8 +113,14 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
         });
 
         navigationView.setNavigationItemSelectedListener(this);
+        //requestPermision();
     }
-
+    @Override
+    public void onResume(){
+        super.onResume();
+        //here...
+        loadMenuData();
+    }
     private void cargarCarta(){
         //obtener la carta
         String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_carta.php";
@@ -232,5 +243,45 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
         headerView = navigationView.getHeaderView(0);
         TextView navUsername = (TextView) headerView.findViewById(R.id.nombreUsuario);
         navUsername.setText(getIntent().getStringExtra("email"));
+        ImageView imageView = (ImageView) headerView.findViewById(R.id.fotoPerfil);
+
+        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_user.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(!response.isEmpty()) {
+                    JSONObject obj;
+                    try {
+                        obj = new JSONObject(response);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    byte[] decodedString = new byte[0];//String-->Image
+                    try {
+                        decodedString = Base64.decode(obj.getString("foto"), Base64.DEFAULT);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    imageView.setImageBitmap(decodedByte);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Cliente.this,"Error: " + error.toString(),Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //añadir elementos para realizar la consulta
+                Map<String,String> parametros= new HashMap<String,String>();
+                parametros.put("email",navUsername.getText().toString());
+                return parametros;
+            }
+        };
+        RequestQueue requestQue= Volley.newRequestQueue(this);
+        requestQue.add(stringRequest);
     }
 }

@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,13 +31,16 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DatosUsuario extends AppCompatActivity {
     TextView nombre;
-    ImageView foto;
+    ImageView foto,editImagen;
+    String encodedImage=null;
     private final int GALLERY_REQ_CODE=1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +49,24 @@ public class DatosUsuario extends AppCompatActivity {
 
         nombre = findViewById(R.id.nombreUsuario);
         foto = findViewById(R.id.ImagenUsuario);
+        editImagen = findViewById(R.id.editImage);
+
 
         nombre.setText(getIntent().getStringExtra("email"));
+        loadImage();
 
-        chooseImage();
-        /*
-        foto.setImageBitmap(decodedByte);*/
+
+        editImagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chooseImage();
+            }
+        });
     }
+
     private void loadImage(){
         //obtener los datos correspondientes al elemento seleccionado
-        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_element.php";
+        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_user.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -84,7 +98,7 @@ public class DatosUsuario extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 //añadir elementos para realizar la consulta
                 Map<String,String> parametros= new HashMap<String,String>();
-                parametros.put("nombre",nombre.getText().toString());
+                parametros.put("email",nombre.getText().toString());
                 return parametros;
             }
         };
@@ -115,6 +129,7 @@ public class DatosUsuario extends AppCompatActivity {
                         }
                         foto.setImageBitmap(
                                 selectedImageBitmap);
+                        guardarImagen();
                     }
                 }
             });
@@ -125,4 +140,38 @@ public class DatosUsuario extends AppCompatActivity {
 
         launchSomeActivity.launch(i);
     }
+    private void guardarImagen(){
+        Bitmap bitmap = ((BitmapDrawable) foto.getDrawable()).getBitmap();
+
+        if (bitmap != null) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        }
+        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/subir_foto_perfil.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(DatosUsuario.this,"Error: " + error.toString(),Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //añadir elementos para realizar la consulta
+                Map<String,String> parametros= new HashMap<String,String>();
+                parametros.put("usuario",nombre.getText().toString());
+                parametros.put("foto",encodedImage);
+                return parametros;
+            }
+        };
+        RequestQueue requestQue= Volley.newRequestQueue(this);
+        requestQue.add(stringRequest);
+    }
+
 }
