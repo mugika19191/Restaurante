@@ -69,7 +69,8 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
     Carta_adapter adapter;
     Button pedir, logout;
     RecyclerView carta;
-    ArrayList<Comida> comidaCarta, pedido;
+    ArrayList<Comida> comidaCarta;
+    Carrito pedido;
     Spinner idiomas;
     DrawerLayout drawerLayout;
     View headerView;
@@ -87,10 +88,10 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         setContentView(R.layout.cliente);
 
         comidaCarta = new ArrayList<>();
-        pedido = new ArrayList<>();
+        pedido = Carrito.getInstance();
 
         pedir = findViewById(R.id.btnPedirCliente);
-        pedir.setText(getString(R.string.carro) + "(" + pedido.size() + ")");
+        pedir.setText(getString(R.string.carro) + "(" + pedido.getCarro().size() + ")");
         logout = findViewById(R.id.btnLogoutCliente);
         carta = findViewById(R.id.carta);
         iconoMen = findViewById(R.id.iconoMenu);
@@ -106,7 +107,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         pedir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), PedirCliente.class));
+                startActivity(new Intent(getApplicationContext(), CarritoActivity.class));
             }
         });
 
@@ -208,18 +209,11 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         //////HAY QUE PONER UN ACTIVITY PARA EDITAR EL ELEMENTO SELECCIONADO/////////
 
         //actividad que realizará la carta seleccionada
-        boolean found = false;
-        String nombre = comidaCarta.get(position).getNombre();
-        for (int i = 0; i < pedido.size() && !found; i++) {
-            if (pedido.get(i).getNombre().equals(nombre)) {
-                found = true;
-            }
-        }
-        if (!found) {
-            pedido.add(comidaCarta.get(position));
-            pedir.setText("PEDIR (" + pedido.size() + ")");
+
+            pedido.getCarro().add(comidaCarta.get(position));
+            pedir.setText("PEDIR (" + pedido.getCarro().size() + ")");
             Toast.makeText(Cliente.this, "Se ha añadido.", Toast.LENGTH_SHORT).show();
-        }
+
         //Toast.makeText(Cliente.this,pedido.size(),Toast.LENGTH_SHORT).show();
     }
 
@@ -245,7 +239,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
     }
 
     private void actualizar() {
-        pedir.setText(getString(R.string.carro) + "(" + pedido.size() + ")");
+        pedir.setText(getString(R.string.carro) + "(" + pedido.getCarro().size() + ")");
         logout.setText(R.string.salir);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.idiomas,
                 android.R.layout.simple_spinner_item);

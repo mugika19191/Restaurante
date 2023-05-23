@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DatosUsuario extends AppCompatActivity {
-    TextView nombre;
+    TextView nombre,dato1,dato2;
     ImageView foto,editImagen;
     String encodedImage=null;
     private final int GALLERY_REQ_CODE=1000;
@@ -50,7 +50,8 @@ public class DatosUsuario extends AppCompatActivity {
         nombre = findViewById(R.id.nombreUsuario);
         foto = findViewById(R.id.ImagenUsuario);
         editImagen = findViewById(R.id.editImage);
-
+        dato1 = findViewById(R.id.dato1);
+        dato2 = findViewById(R.id.dato2);
 
         nombre.setText(getIntent().getStringExtra("email"));
         loadImage();
@@ -81,6 +82,8 @@ public class DatosUsuario extends AppCompatActivity {
                     byte[] decodedString = new byte[0];//String-->Image
                     try {
                         decodedString = Base64.decode(obj.getString("foto"), Base64.DEFAULT);
+                        dato1.setText(obj.getString("nombre"));
+                        dato2.setText(obj.getString("apellido"));
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
