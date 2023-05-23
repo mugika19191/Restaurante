@@ -1,4 +1,5 @@
 package com.example.restaurante;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.location.Address;
@@ -7,7 +8,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
-import android.Manifest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,8 +50,9 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private final static int LOCATION_REQUEST_CODE = 23;
     boolean locationPermission=false;
-    LatLng rest = new LatLng(43.269811, -2.941210);
-    LatLng userPos;
+    LatLng rest = new LatLng(43.3036, -2.9770);
+    String userPos;
+    LatLng userPosLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
 
     @Override
@@ -59,9 +60,8 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_mapa);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-
-
+        userPos=getIntent().getStringExtra("pos");
+        userPosLocation= new LatLng(new Double(userPos.split(",")[0]),new Double(userPos.split(",")[1]));
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -81,17 +81,24 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        direction();
+        try {
+            direction();
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void direction(){
+    private void direction() throws PackageManager.NameNotFoundException {
+        ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+        Bundle bundle = ai.metaData;
+        String myApiKey = bundle.getString("com.google.android.geo.API_KEY");
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String url = Uri.parse("https://maps.googleapis.com/maps/api/directions/json")
                 .buildUpon()
-                .appendQueryParameter("destination", "-6.9218571, 107.6048254")
-                .appendQueryParameter("origin", "-6.9249233, 107.6345122")
+                .appendQueryParameter("destination",rest.latitude+", "+ rest.longitude)
+                .appendQueryParameter("origin", userPos)
                 .appendQueryParameter("mode", "driving")
-                .appendQueryParameter("key", "AIzaSyCj4vq-qX3mmqmGfFE9HJHh7TaYgMLras4")
+                .appendQueryParameter("key",myApiKey)
                 .toString();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -128,12 +135,12 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
                             polylineOptions.geodesic(true);
                         }
                         mMap.addPolyline(polylineOptions);
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(-6.9249233, 107.6345122)).title("Marker 1"));
-                        mMap.addMarker(new MarkerOptions().position(new LatLng(-6.9218571, 107.6048254)).title("Marker 1"));
+                        mMap.addMarker(new MarkerOptions().position(rest).title("Marker 1"));
+                        mMap.addMarker(new MarkerOptions().position(userPosLocation).title("Marker 2"));
 
                         LatLngBounds bounds = new LatLngBounds.Builder()
-                                .include(new LatLng(-6.9249233, 107.6345122))
-                                .include(new LatLng(-6.9218571, 107.6048254)).build();
+                                .include(rest)
+                                .include(userPosLocation).build();
                         Point point = new Point();
                         getWindowManager().getDefaultDisplay().getSize(point);
                         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, point.x, 150, 30));
@@ -173,7 +180,7 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
                 b = encoded.charAt(index++) - 63;
                 result |= (b & 0x1f) << shift;
                 shift += 5;
-            } while (b > 0x20);
+            } while (b >= 0x20);
             int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
             lng += dlng;
 
@@ -183,4 +190,6 @@ public class Mapa extends AppCompatActivity implements OnMapReadyCallback {
         }
         return poly;
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
 }

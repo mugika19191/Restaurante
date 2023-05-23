@@ -5,18 +5,18 @@
         android:icon="@drawable/tarjeta_de_identificacion"
         android:title="Perfil" />
     <item
+        android:id="@+id/pedidos"
+        android:icon="@drawable/carro_menu"
+        android:title="Pedidos" />
+    <item
         android:id="@+id/mapa"
         android:icon="@drawable/maps_and_location"
         android:title="Localizacion" />
-    <item android:title="Opciones"
-        android:icon="@drawable/preferencias">
-        <menu>
-            <item
-                android:id="@+id/Idioma"
-                android:icon="@drawable/traducir"
-                android:title="Idioma" />
-        </menu>
-    </item>
+    <item
+        android:id="@+id/opciones"
+        android:icon="@drawable/preferencias"
+        android:title="Opciones" />
+
     <item
         android:id="@+id/logOut"
         android:icon="@drawable/cerrar_sesion"
