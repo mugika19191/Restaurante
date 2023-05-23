@@ -1,5 +1,7 @@
 package com.example.restaurante;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -7,7 +9,14 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationRequest;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
 import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,19 +43,29 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.gms.location.LocationListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class Cliente extends AppCompatActivity implements RecycleviewInterface,NavigationView.OnNavigationItemSelectedListener{
+public class Cliente extends AppCompatActivity implements RecycleviewInterface, NavigationView.OnNavigationItemSelectedListener {
     Carta_adapter adapter;
     Button pedir, logout;
     RecyclerView carta;
@@ -57,26 +76,32 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
     NavigationView navigationView;
     ImageView iconoMen;
     TextView tit;
+
+    FusedLocationProviderClient fusedLocationProviderClient;
+
+    LatLng userPos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cliente);
 
-        comidaCarta= new ArrayList<>();
-        pedido= new ArrayList<>();
+        comidaCarta = new ArrayList<>();
+        pedido = new ArrayList<>();
 
         pedir = findViewById(R.id.btnPedirCliente);
-        pedir.setText(getString(R.string.carro) +"("+pedido.size()+")");
+        pedir.setText(getString(R.string.carro) + "(" + pedido.size() + ")");
         logout = findViewById(R.id.btnLogoutCliente);
         carta = findViewById(R.id.carta);
-        iconoMen=findViewById(R.id.iconoMenu);
+        iconoMen = findViewById(R.id.iconoMenu);
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
         navigationView.setItemIconTintList(null);
-        adapter = new Carta_adapter(this,comidaCarta,this);
+        adapter = new Carta_adapter(this, comidaCarta, this);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         cargarCarta();
-        idiomas= findViewById(R.id.spinner2);
-        tit= findViewById(R.id.tvTitCliente);
+        idiomas = findViewById(R.id.spinner2);
+        tit = findViewById(R.id.tvTitCliente);
         loadMenuData();
         pedir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,15 +138,23 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
         });
 
         navigationView.setNavigationItemSelectedListener(this);
-        //requestPermision();
+        if (ActivityCompat.checkSelfPermission(Cliente.this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getLastLocation();
+        } else {
+            ActivityCompat.requestPermissions(Cliente.this
+                    , new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+        }
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         //here...
         loadMenuData();
     }
-    private void cargarCarta(){
+
+    private void cargarCarta() {
         //obtener la carta
         String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_carta.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -133,7 +166,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-                for(int i = 0; i < arr.length(); i++){
+                for (int i = 0; i < arr.length(); i++) {
                     try {
                         crearComidas(arr.getJSONObject(i));
                     } catch (JSONException e) {
@@ -149,10 +182,10 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Cliente.this,"Error: " + error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(Cliente.this, "Error: " + error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
-        RequestQueue requestQue= Volley.newRequestQueue(this);
+        RequestQueue requestQue = Volley.newRequestQueue(this);
         requestQue.add(stringRequest);
     }
 
@@ -162,7 +195,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
         String CImagen = elemento.getString("foto");
         float precio = Float.parseFloat(elemento.getString("precio"));
         //carta
-        comidaCarta.add(new Comida(CNombre,CImagen,precio));
+        comidaCarta.add(new Comida(CNombre, CImagen, precio));
     }
 
     @Override
@@ -175,17 +208,17 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
         //////HAY QUE PONER UN ACTIVITY PARA EDITAR EL ELEMENTO SELECCIONADO/////////
 
         //actividad que realizará la carta seleccionada
-        boolean found=false;
+        boolean found = false;
         String nombre = comidaCarta.get(position).getNombre();
-        for(int i=0;i<pedido.size() && !found;i++){
-            if (pedido.get(i).getNombre().equals(nombre)){
+        for (int i = 0; i < pedido.size() && !found; i++) {
+            if (pedido.get(i).getNombre().equals(nombre)) {
                 found = true;
             }
         }
-        if (!found){
+        if (!found) {
             pedido.add(comidaCarta.get(position));
-            pedir.setText("PEDIR ("+pedido.size()+")");
-            Toast.makeText(Cliente.this,"Se ha añadido.",Toast.LENGTH_SHORT).show();
+            pedir.setText("PEDIR (" + pedido.size() + ")");
+            Toast.makeText(Cliente.this, "Se ha añadido.", Toast.LENGTH_SHORT).show();
         }
         //Toast.makeText(Cliente.this,pedido.size(),Toast.LENGTH_SHORT).show();
     }
@@ -194,16 +227,16 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
     public void onItemLongClick(int position) {
         Intent intent = new Intent(getApplicationContext(), ElementoSeleccionado.class);
         //pasar valores a ElementoSeleccionado
-        intent.putExtra("Nombre",comidaCarta.get(position).getNombre());
-        intent.putExtra("User","nombreDeUsuario");//para más adelante
+        intent.putExtra("Nombre", comidaCarta.get(position).getNombre());
+        intent.putExtra("User", "nombreDeUsuario");//para más adelante
         startActivity(intent);
     }
 
-    private void cambiarIdioma(String idioma){
+    private void cambiarIdioma(String idioma) {
         Locale nuevaloc = new Locale(idioma);
         Locale.setDefault(nuevaloc);
-        Resources resources= getBaseContext().getResources();
-        Configuration configuration =resources.getConfiguration();
+        Resources resources = getBaseContext().getResources();
+        Configuration configuration = resources.getConfiguration();
         configuration.setLocale(nuevaloc);
         configuration.setLayoutDirection(nuevaloc);
         Context context = getBaseContext().createConfigurationContext(configuration);
@@ -211,10 +244,10 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
         actualizar();
     }
 
-    private void actualizar(){
-        pedir.setText(getString(R.string.carro)+"("+pedido.size()+")");
+    private void actualizar() {
+        pedir.setText(getString(R.string.carro) + "(" + pedido.size() + ")");
         logout.setText(R.string.salir);
-        ArrayAdapter<CharSequence> adapter= ArrayAdapter.createFromResource(this, R.array.idiomas ,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.idiomas,
                 android.R.layout.simple_spinner_item);
         idiomas.setAdapter(adapter);
         tit.setText(R.string.cartaTit);
@@ -222,24 +255,27 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
+        Intent intent;
+        switch (item.getItemId()) {
             case R.id.logOut:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
                 break;
             case R.id.menuProfile:
-                Intent intent = new Intent(getApplicationContext(),DatosUsuario.class);
-                intent.putExtra("email",getIntent().getStringExtra("email"));
+                intent = new Intent(getApplicationContext(), DatosUsuario.class);
+                intent.putExtra("email", getIntent().getStringExtra("email"));
                 startActivity(intent);
                 break;
             case R.id.mapa:
-                startActivity(new Intent(getApplicationContext(), Mapa.class));
+                intent = new Intent(getApplicationContext(), Mapa.class);
+                intent.putExtra("pos", new String(userPos.latitude+" ,"+userPos.longitude));
+                startActivity(intent);
                 break;
         }
         return true;
     }
 
-    private void loadMenuData(){
+    private void loadMenuData() {
         headerView = navigationView.getHeaderView(0);
         TextView navUsername = (TextView) headerView.findViewById(R.id.nombreUsuario);
         navUsername.setText(getIntent().getStringExtra("email"));
@@ -249,7 +285,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(!response.isEmpty()) {
+                if (!response.isEmpty()) {
                     JSONObject obj;
                     try {
                         obj = new JSONObject(response);
@@ -270,18 +306,65 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface,N
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Cliente.this,"Error: " + error.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(Cliente.this, "Error: " + error.toString(), Toast.LENGTH_SHORT).show();
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 //añadir elementos para realizar la consulta
-                Map<String,String> parametros= new HashMap<String,String>();
-                parametros.put("email",navUsername.getText().toString());
+                Map<String, String> parametros = new HashMap<String, String>();
+                parametros.put("email", navUsername.getText().toString());
                 return parametros;
             }
         };
-        RequestQueue requestQue= Volley.newRequestQueue(this);
+        RequestQueue requestQue = Volley.newRequestQueue(this);
         requestQue.add(stringRequest);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getLastLocation() {
+       LocationManager locationManager = (LocationManager) getSystemService(
+                Context.LOCATION_SERVICE
+        );
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                ||locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                @SuppressLint("MissingPermission")
+                @Override
+                public void onComplete(@NonNull Task<Location> task) {
+                    Location location = task.getResult();
+                    if (location!=null){
+                        userPos = new LatLng(location.getLatitude(),location.getLongitude());
+                    }
+                    else{
+                        com.google.android.gms.location.LocationRequest locationRequest = new com.google.android.gms.location.LocationRequest().
+                                setPriority(LocationRequest.QUALITY_HIGH_ACCURACY)
+                                .setInterval(1000)
+                                .setFastestInterval(1000)
+                                .setNumUpdates(1);
+                        LocationCallback locationCallback = new LocationCallback(){
+                            @Override
+                            public void onLocationResult(LocationResult locationResult) {
+                                userPos = new LatLng(locationResult.getLastLocation().getLatitude(),locationResult.getLastLocation().getLongitude());
+                            }
+                        };
+                        fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback,Looper.myLooper());
+                    }
+                }
+            });
+        }else{
+            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        }
+    }
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onRequestPermissionsResult (int requestCode, @NonNull String [] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 100 && grantResults.length> 0 && (grantResults[0] + grantResults[1]
+                == PackageManager.PERMISSION_GRANTED)){
+            getLastLocation();
+        }else {
+
+        }
     }
 }
