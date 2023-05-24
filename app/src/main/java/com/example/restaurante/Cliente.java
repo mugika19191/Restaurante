@@ -210,6 +210,31 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
             count.setText(""+pedido.getCarro().size());
             Toast.makeText(Cliente.this, "Se ha añadido.", Toast.LENGTH_SHORT).show();
 
+        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/subir_elemento_carro.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Cliente.this, "Error: " + error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //añadir elementos para realizar la consulta
+                Map<String, String> parametros = new HashMap<String, String>();
+                parametros.put("usuario",getIntent().getStringExtra("email") );
+                parametros.put("elemento",comidaCarta.get(position).getNombre());
+                return parametros;
+            }
+        };
+        RequestQueue requestQue = Volley.newRequestQueue(this);
+        requestQue.add(stringRequest);
+
+
         //Toast.makeText(Cliente.this,pedido.size(),Toast.LENGTH_SHORT).show();
     }
 
@@ -259,6 +284,11 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
             case R.id.mapa:
                 intent = new Intent(getApplicationContext(), Mapa.class);
                 intent.putExtra("pos", new String(userPos.latitude+" ,"+userPos.longitude));
+                startActivity(intent);
+                break;
+            case R.id.pedidos:
+                intent = new Intent(getApplicationContext(), Pedidos.class);
+                intent.putExtra("email", getIntent().getStringExtra("email"));
                 startActivity(intent);
                 break;
         }

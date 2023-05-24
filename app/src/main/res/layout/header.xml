@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:background="#6AF16A">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/fotoPerfil"
@@ -23,6 +24,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="4dp"
         android:text="NameXD"
+        android:textColor="@color/white"
         app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
