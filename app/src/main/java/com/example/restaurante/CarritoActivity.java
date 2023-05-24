@@ -131,9 +131,32 @@ public class CarritoActivity extends AppCompatActivity implements RecycleviewInt
 
     @Override
     public void onItemLongClick(int position) {
-        Carrito.getInstance().getCarro().remove(position);
-        setTotal();
-        adapter.notifyDataSetChanged();
+
+        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/delete_elemento_carro.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Carrito.getInstance().getCarro().remove(position);
+                setTotal();
+                adapter.notifyDataSetChanged();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(CarritoActivity.this, "Error: " + error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //añadir elementos para realizar la consulta
+                Map<String, String> parametros = new HashMap<String, String>();
+                parametros.put("usuario",getIntent().getStringExtra("email") );
+                parametros.put("elemento",Carrito.getInstance().getCarro().get(position).getNombre());
+                return parametros;
+            }
+        };
+        RequestQueue requestQue = Volley.newRequestQueue(this);
+        requestQue.add(stringRequest);
 
     }
     private void setTotal(){
