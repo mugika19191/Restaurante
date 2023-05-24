@@ -87,7 +87,7 @@ public class CarritoActivity extends AppCompatActivity implements RecycleviewInt
             elementos+=carrito.getCarro().get(i).getNombre();
             elementos+="\n";
         }
-        String formattedString = String.format("%.02f", carrito.getFullPrice());
+        String formattedString = String.format("%.02f", carrito.getFullPrice()*0.95);
 
 
         String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/insert_pedido.php";
@@ -160,7 +160,7 @@ public class CarritoActivity extends AppCompatActivity implements RecycleviewInt
 
     }
     private void setTotal(){
-        String formattedString = String.format("%.02f", Carrito.getInstance().getFullPrice());
+        String formattedString = String.format("%.02f", Carrito.getInstance().getFullPrice()*0.95);
         total.setText("TOTAL: "+formattedString+"€");
     }
 
