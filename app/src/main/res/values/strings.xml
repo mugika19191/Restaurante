@@ -52,4 +52,7 @@
     <string name="estado">State</string>
     <string name="desc">Discount: 5%</string>
     <string name="perfil">Profile</string>
+    <string name="pedidos">Orders</string>
+    <string name="local">Location</string>
+    <string name="opcion">Change language</string>
 </resources>

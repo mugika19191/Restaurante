@@ -52,4 +52,7 @@
     <string name="estado">Egoera</string>
     <string name="desc">Beherapena: %5</string>
     <string name="perfil">Profila</string>
+    <string name="pedidos">Eskaerak</string>
+    <string name="local">Kokalekua</string>
+    <string name="opcion">Hizkuntza aldatu</string>
 </resources>
