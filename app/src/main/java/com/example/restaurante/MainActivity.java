@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     Spinner idiomas;
     TextView tit1,tit2, forget;
     String idioma;
-
     FirebaseAuth auth;
 
     @Override
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!pass.getText().toString().isEmpty() && !email.getText().toString().isEmpty()){
                     iniciarSesion();
                 }else{
-                    Toast.makeText(MainActivity.this,"Rellena todos los apartados.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,R.string.vacio,Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Registro.class);
+                intent.putExtra("language",idioma);
                 startActivity(intent);
             }
         });
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {   //si ha escogido un idioma
                     idioma = adapterView.getItemAtPosition(i).toString();  //obtiene el valor escogido
-                    cambiarIdioma(idioma);
+                    cambiarIdioma();
                 }
             }
 
@@ -143,51 +144,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void iniciarSesion(){
-      /*  String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/validar_usuario.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if(!response.isEmpty()){    //comprueba si el usuario y contraseña son correctas
-                    Intent intent = new Intent(getApplicationContext(), Cliente.class);
-                    intent.putExtra("email",email.getText().toString());
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(MainActivity.this,"Contraseña o email incorrectos.",Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this,"Error: " + error.toString(),Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                //Mete los parametros para el php
-                Map<String,String> parametros= new HashMap<String,String>();
-                parametros.put("email",email.getText().toString());
-                parametros.put("pass",pass.getText().toString());
-                return parametros;
-            }
-        };
-        RequestQueue requestQue= Volley.newRequestQueue(this);
-        requestQue.add(stringRequest);*/
+        FirebaseUser user = auth.getCurrentUser();
         auth.signInWithEmailAndPassword(email.getText().toString(),pass.getText().toString() )
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(MainActivity.this, "signInWithEmail:success", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), Cliente.class);
-                            intent.putExtra("email",email.getText().toString());
-                            startActivity(intent);
+                            if (user.isEmailVerified()){    //al tener el e-mail verificado puede iniciar sesión
+                                Intent intent = new Intent(getApplicationContext(), Cliente.class);
+                                intent.putExtra("email",email.getText().toString().trim());
+                                startActivity(intent);
+                            }else{
+                                Toast.makeText(MainActivity.this, R.string.verif, Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            Toast.makeText(MainActivity.this, R.string.inicioErr, Toast.LENGTH_LONG).show();
                         }
                     }
                 });
     }
 
-    private void cambiarIdioma(String idioma){
+    private void cambiarIdioma(){
         Locale nuevaloc = new Locale(idioma);
         Locale.setDefault(nuevaloc);
         Resources resources= getBaseContext().getResources();
@@ -200,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void actualizar(){
+        //actualiza todos los datos al idioma seleccionado
         inicio_sesion.setText(R.string.inicioBut);
         registrar.setText(R.string.registroBut);
         invitado.setText(R.string.invitadoBut);
@@ -209,26 +187,44 @@ public class MainActivity extends AppCompatActivity {
         idiomas.setAdapter(adapter);
         tit1.setText(R.string.inicioTit);
         tit2.setText(R.string.sesionTit);
+        forget.setText(R.string.recuperar);
     }
 
     private void mandarContraseña(String email){
-        Toast.makeText(MainActivity.this,"Fire",Toast.LENGTH_SHORT).show();
-       // if (comprobarCorreoExiste(email)){
-        auth.setLanguageCode(idioma);
-        auth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
-                            Toast.makeText(MainActivity.this, "Correo enviado",Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                });
+        // recuperar la contraseña: se manda un correo al usuario con un link en el que puede modificarlo
+        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_user.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(!response.isEmpty()){    //comprueba si existe un usuario con el correo adjuntado a la consulta
+                    auth.setLanguageCode(idioma);
+                    auth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(MainActivity.this, R.string.correo,Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this,"Error: " + error.toString(),Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //Mete los parametros para el php
+                Map<String,String> parametros= new HashMap<String,String>();
+                parametros.put("email",email);
+                return parametros;
+            }
+        };
+        RequestQueue requestQue= Volley.newRequestQueue(this);
+        requestQue.add(stringRequest);
     }
-
-   /* private boolean comprobarCorreoExiste(String email) {
-        return true;
-    }*/
 
 }

@@ -29,4 +29,8 @@
     <string name="contr6">Pasahitzak 6 karaktere izan behar ditu gutxienez</string>
     <string name="vacio">Bete itzazu atal guztiak</string>
     <string name="regCorrecto">Erregistroa egina.</string>
+    <string name="usuRep">Jada badago erabilzaile bat e-mail hori duena.</string>
+    <string name="inicioErr">Daturen bat ez da zuzena.</string>
+    <string name="verif">E-mail ez da baieztatu.</string>
+    <string name="correo">E-mail bidalita.</string>
 </resources>

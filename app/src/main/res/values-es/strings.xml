@@ -29,4 +29,8 @@
     <string name="contr6">Contraseña minimo 6 caracteres.</string>
     <string name="vacio">Rellena todos los apartados.</string>
     <string name="regCorrecto">Registro completado.</string>
+    <string name="usuRep">Ya existe un usuario con ese correo.</string>
+    <string name="inicioErr">Algún dato es incorrecto.</string>
+    <string name="verif">E-mail no verificado.</string>
+    <string name="correo">E-mail enviado.</string>
 </resources>

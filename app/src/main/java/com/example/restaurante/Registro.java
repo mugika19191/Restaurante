@@ -25,12 +25,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Registro extends AppCompatActivity {
 
     Button registrar, cancelar;
     EditText email, pass;
+    FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +41,13 @@ public class Registro extends AppCompatActivity {
         cancelar = findViewById(R.id.btnCancelarReg);
         email = findViewById(R.id.edEmailReg);
         pass = findViewById(R.id.edPassReg);
+        auth= FirebaseAuth.getInstance();
 
         registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!email.getText().toString().isEmpty() && !pass.getText().toString().isEmpty()
-                && pass.length()>=6){
+                && pass.length()>=6){   //la contraseña debe tener al menos 6 caracteres
                     existeUsuario();
                 }else{
                     if (pass.length()<6){
@@ -58,6 +61,7 @@ public class Registro extends AppCompatActivity {
         });
 
         cancelar.setOnClickListener(new View.OnClickListener() {
+            //retrocede al MainActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -65,64 +69,73 @@ public class Registro extends AppCompatActivity {
             }
         });
     }
-    private void insertarUsuario(){
-        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/insert_user.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(Registro.this,R.string.regCorrecto,Toast.LENGTH_SHORT).show();
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-         //       DatabaseReference dataBase = auth.getReference();
-                auth.createUserWithEmailAndPassword(email.getText().toString(),pass.getText().toString() )
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()){
-           //                        DatabaseReference  dataBase= auth.
-                                    FirebaseAuth auth = FirebaseAuth.getInstance();
-                                    FirebaseUser user = auth.getCurrentUser();
 
-                                    user.sendEmailVerification()
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Toast.makeText(Registro.this, "creada cuenta", Toast.LENGTH_SHORT).show();
-                                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                                        startActivity(intent);
-                                                    }
-                                                }
-                                            });
-                                }
-                            }
-                        });
+    private void mandarVerificacion(){
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Registro.this,"Error: " + error.toString(),Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> parametros= new HashMap<String,String>();
-                parametros.put("email",email.getText().toString());
-                parametros.put("nombre","");
-                parametros.put("apellido","");
-                return parametros;
-            }
-        };
-        RequestQueue requestQue= Volley.newRequestQueue(this);
-        requestQue.add(stringRequest);
+        FirebaseUser user = auth.getCurrentUser();
+        //el usuario es registrado pero se le manda un correo de verificación, en el que debe aceptar sino no `podra iniciar sesión
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            //email
+                            Toast.makeText(Registro.this, R.string.correo, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(Registro.this, "Error", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+        auth.setLanguageCode(getIntent().getStringExtra("language"));
     }
+    private void insertarUsuario(){
+        auth.createUserWithEmailAndPassword(email.getText().toString(),pass.getText().toString() )
+            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        //añade el email de usuario en phpAdmin y en Firebase el email y contraseña
+                        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/insert_user.php";
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(Registro.this,R.string.regCorrecto,Toast.LENGTH_SHORT).show();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(Registro.this,"Error: " + error.toString(),Toast.LENGTH_SHORT).show();
+                            }
+                        }){
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError {
+                                Map<String,String> parametros= new HashMap<String,String>();
+                                parametros.put("email",email.getText().toString());
+                                parametros.put("nombre","");
+                                parametros.put("apellido","");
+                                return parametros;
+                            }
+                        };
+                        RequestQueue requestQue= Volley.newRequestQueue(Registro.this);
+                        requestQue.add(stringRequest);
+                        mandarVerificacion();
+                    }
+                }
+            });
+
+    }
+
+
     private void existeUsuario(){
+        //comprueba si existe ya un usuario con ese email
         String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_user.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if(!response.isEmpty()){    //comprueba que no haya ningún usuario con el correo insertado
-                    Toast.makeText(Registro.this,"Ya existe un usuario con es correo.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Registro.this,R.string.usuRep,Toast.LENGTH_SHORT).show();
                 }else{
                     insertarUsuario();
                 }

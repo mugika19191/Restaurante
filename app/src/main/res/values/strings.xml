@@ -29,4 +29,8 @@
     <string name="contr6">Password must be at least 6 characters long.</string>
     <string name="vacio">Complete all sections.</string>
     <string name="regCorrecto">Register done.</string>
+    <string name="usuRep">A user with this email already exists.</string>
+    <string name="inicioErr">Some information is incorrect.</string>
+    <string name="verif">E-mail is not verified.</string>
+    <string name="correo">Sended e-mail.</string>
 </resources>
