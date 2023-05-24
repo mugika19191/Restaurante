@@ -30,6 +30,7 @@ import java.util.Map;
 public class ElementoSeleccionado extends AppCompatActivity {
     TextView nombre,desc;
     ImageView foto;
+    String idioma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class ElementoSeleccionado extends AppCompatActivity {
         foto = findViewById(R.id.ImagenElemento);
         desc = findViewById(R.id.DescElemento);
         nombre.setText(getIntent().getStringExtra("Nombre"));
+        idioma=(getIntent().getStringExtra("idioma"));
 
         loadImage();
         /*
@@ -61,7 +63,18 @@ public class ElementoSeleccionado extends AppCompatActivity {
 
                     byte[] decodedString = new byte[0];//String-->Image
                     try {
-                    desc.setText(obj.getString("ingre"));
+                        switch (idioma){
+                            case "eu":
+                                desc.setText(obj.getString("eus"));
+                                break;
+                            case "es":
+                                desc.setText(obj.getString("ingre"));
+                                break;
+                            case "en":
+                                desc.setText(obj.getString("ing"));
+                                break;
+                        }
+
                         decodedString = Base64.decode(obj.getString("foto"), Base64.DEFAULT);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);

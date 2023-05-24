@@ -73,7 +73,7 @@ public class Trabajador extends AppCompatActivity implements RecycleviewInterfac
     DrawerLayout drawerLayout;
     View headerView;
     NavigationView navigationView;
-    ImageView iconoMen;
+    ImageView iconoMen,add;
     TextView tit;
 
     FusedLocationProviderClient fusedLocationProviderClient;

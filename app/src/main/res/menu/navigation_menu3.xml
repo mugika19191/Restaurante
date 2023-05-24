@@ -9,10 +9,6 @@
         android:id="@+id/mapa"
         android:icon="@drawable/maps_and_location"
         android:title="@string/local" />
-    <item
-        android:id="@+id/opciones"
-        android:icon="@drawable/preferencias"
-        android:title="@string/opcion" />
 
     <item
         android:id="@+id/logOut"

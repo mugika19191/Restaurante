@@ -40,22 +40,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.712" />
 
-    <EditText
-        android:id="@+id/edEmailReg2"
-        android:layout_width="250dp"
-        android:layout_height="45dp"
-        android:drawableStart="@drawable/baseline_alternate_email_24"
-        android:drawablePadding="10dp"
-        android:drawableTint="#6AF16A"
-        android:ems="10"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.6" />
 
     <EditText
         android:id="@+id/edApellido"

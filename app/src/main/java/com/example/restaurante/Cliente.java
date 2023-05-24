@@ -349,6 +349,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         //pasar valores a ElementoSeleccionado
         intent.putExtra("Nombre", comidaCarta.get(position).getNombre());
         intent.putExtra("User", "nombreDeUsuario");//para más adelante
+        intent.putExtra("idioma", idioma);//para más adelante
         startActivity(intent);
     }
 
@@ -358,7 +359,6 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
             @Override
             public void onResponse(String response) {
                 if (!response.isEmpty()) {
-                    Toast.makeText(Cliente.this, "BBB",Toast.LENGTH_SHORT).show();
                     JSONObject obj;
                     try {
                         obj = new JSONObject(response);
@@ -367,13 +367,10 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
                     }
                     try {
                         idioma = obj.getString("idioma");
-                        Toast.makeText(Cliente.this, "AAA"+idioma, Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
                     actualizar();
-                }else{
-                    Toast.makeText(Cliente.this, "EMPTY",Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener() {
