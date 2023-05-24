@@ -29,9 +29,8 @@ import java.util.Map;
 
 public class Pedidos extends AppCompatActivity {
     ArrayList<Recibo> pedidos = new ArrayList<>();
-    int indice=1;
+    int indice;
     TextView ReciboInfo,fecha,total,estado,counter;
-
     ImageView izquierda,derecha;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +43,7 @@ public class Pedidos extends AppCompatActivity {
         counter = findViewById(R.id.counter);
         izquierda =findViewById(R.id.izquierda);
         derecha = findViewById(R.id.derecha);
-
-
+        indice=1;
 
         izquierda.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,11 +65,9 @@ public class Pedidos extends AppCompatActivity {
         });
         ReciboInfo.setMovementMethod(new ScrollingMovementMethod());
         cargarDatos();
-
     }
 
     private void ponerInfo() {
-
         if(pedidos.size()!=0){
             Recibo recibo = pedidos.get(indice-1);
             counter.setText(indice+"/"+pedidos.size());
@@ -129,7 +125,6 @@ public class Pedidos extends AppCompatActivity {
     private void crearPedidos(JSONObject jsonObject) throws JSONException {
         Recibo recibo = new Recibo(jsonObject.getString("elementos"),jsonObject.getString("precio"),
                 jsonObject.getString("fecha"),jsonObject.getString("estado")) ;
-
         pedidos.add(recibo);
     }
 }

@@ -4,6 +4,8 @@
     <string name="sesionTit"> in </string>
     <string name="regTit1">User\'s</string>
     <string name="regTit2">register</string>
+    <string name="nombre">Name</string>
+    <string name="apellido">Surname</string>
     <string name="email">E-mail</string>
     <string name="contraseña">Password</string>
     <string name="inicioBut">LOG IN</string>
@@ -32,5 +34,14 @@
     <string name="usuRep">A user with this email already exists.</string>
     <string name="inicioErr">Some information is incorrect.</string>
     <string name="verif">E-mail is not verified.</string>
+    <string name="idioAct">Language updated.</string>
     <string name="correo">Sended e-mail.</string>
+    <string name="carrito">Cart</string>
+    <string name="tot0">TOTAL: 0.00€</string>
+    <string name="totAct">TOTAL: </string>
+    <string name="elim">ELIMINATE</string>
+    <string name="pedido">Order</string>
+    <string name="fecha">Date</string>
+    <string name="estado">State</string>
+    <string name="desc">Discount: 5%</string>
 </resources>

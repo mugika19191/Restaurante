@@ -56,7 +56,6 @@ public class DatosUsuario extends AppCompatActivity {
         nombre.setText(getIntent().getStringExtra("email"));
         loadImage();
 
-
         editImagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,6 +142,33 @@ public class DatosUsuario extends AppCompatActivity {
 
         launchSomeActivity.launch(i);
     }
+
+    private void actualizarIdioma(){
+        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/update_idioma.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(DatosUsuario.this,R.string.idioAct,Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(DatosUsuario.this,"Error: " + error.toString(),Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //añadir elementos para realizar la consulta
+                Map<String,String> parametros= new HashMap<String,String>();
+                parametros.put("usuario",nombre.getText().toString());
+             //   parametros.put("idioma",idioma);
+                return parametros;
+            }
+        };
+        RequestQueue requestQue= Volley.newRequestQueue(this);
+        requestQue.add(stringRequest);
+    }
+
     private void guardarImagen(){
         Bitmap bitmap = ((BitmapDrawable) foto.getDrawable()).getBitmap();
 

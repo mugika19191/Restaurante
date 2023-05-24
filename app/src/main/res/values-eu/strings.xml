@@ -6,6 +6,8 @@
     <string name="regTit2">erregistroa</string>
     <string name="email">E-mail</string>
     <string name="contraseña">Pasahitza</string>
+    <string name="nombre">Izena</string>
+    <string name="apellido">Abizena</string>
     <string name="inicioBut">SAIOA HASI</string>
     <string name="registroBut">ERREGISTRATU</string>
     <string name="recBut"> BERRESKURATU </string>
@@ -32,5 +34,14 @@
     <string name="usuRep">Jada badago erabilzaile bat e-mail hori duena.</string>
     <string name="inicioErr">Daturen bat ez da zuzena.</string>
     <string name="verif">E-mail ez da baieztatu.</string>
+    <string name="idioAct">Hizkuntza eguneratuta.</string>
     <string name="correo">E-mail bidalita.</string>
+    <string name="carrito">Orga</string>
+    <string name="tot0">GUZTIRA: 0.00€</string>
+    <string name="totAct">GUZTIRA: </string>
+    <string name="elim">EZABATU</string>
+    <string name="pedido">Eskaera</string>
+    <string name="fecha">Data</string>
+    <string name="estado">Egoera</string>
+    <string name="desc">Beherapena: %5</string>
 </resources>

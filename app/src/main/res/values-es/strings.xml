@@ -6,6 +6,8 @@
     <string name="regTit2">de usuario</string>
     <string name="email">E-mail</string>
     <string name="contraseña">Contraseña</string>
+    <string name="nombre">Nombre</string>
+    <string name="apellido">Apellido</string>
     <string name="inicioBut">INICIAR SESIÓN</string>
     <string name="registroBut">REGISTRATE</string>
     <string name="recBut"> RECUPERAR </string>
@@ -32,5 +34,14 @@
     <string name="usuRep">Ya existe un usuario con ese correo.</string>
     <string name="inicioErr">Algún dato es incorrecto.</string>
     <string name="verif">E-mail no verificado.</string>
+    <string name="idioAct">Idioma actualizado.</string>
     <string name="correo">E-mail enviado.</string>
+    <string name="carrito">Carrito</string>
+    <string name="tot0">TOTAL: 0.00€</string>
+    <string name="totAct">TOTAL: </string>
+    <string name="elim">ELIMINAR</string>
+    <string name="pedido">Pedido</string>
+    <string name="fecha">Fecha</string>
+    <string name="estado">Estado</string>
+    <string name="desc">Descuento: 5%</string>
 </resources>

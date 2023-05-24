@@ -31,7 +31,7 @@ import java.util.Map;
 public class Registro extends AppCompatActivity {
 
     Button registrar, cancelar;
-    EditText email, pass;
+    EditText email, pass, name, surname;
     FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,8 @@ public class Registro extends AppCompatActivity {
         setContentView(R.layout.registro);
         registrar = findViewById(R.id.btnRegistrar);
         cancelar = findViewById(R.id.btnCancelarReg);
+        name = findViewById(R.id.edNombre);
+        surname = findViewById(R.id.edApellido);
         email = findViewById(R.id.edEmailReg);
         pass = findViewById(R.id.edPassReg);
         auth= FirebaseAuth.getInstance();
@@ -113,8 +115,9 @@ public class Registro extends AppCompatActivity {
                             protected Map<String, String> getParams() throws AuthFailureError {
                                 Map<String,String> parametros= new HashMap<String,String>();
                                 parametros.put("email",email.getText().toString());
-                                parametros.put("nombre","");
-                                parametros.put("apellido","");
+                                parametros.put("nombre", name.getText().toString());
+                                parametros.put("apellido", surname.getText().toString());
+                                parametros.put("language",getIntent().getStringExtra("language") );
                                 return parametros;
                             }
                         };

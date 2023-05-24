@@ -11,8 +11,8 @@ public class Recibo {
     // Constructor
     // Here we will be creating private constructor
     // restricted to this class itself
-    public Recibo(String eleme, String pre, String fe, String est)
-    {
+    public Recibo(String eleme, String pre, String fe, String est) {
+        //eraikitzailea
         this.elementos=eleme;
         this.precio=pre;
         this.fecha=fe;

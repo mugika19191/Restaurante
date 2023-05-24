@@ -96,13 +96,11 @@ public class MainActivity extends AppCompatActivity {
                 if (i != 0) {   //si ha escogido un idioma
                     idioma = adapterView.getItemAtPosition(i).toString();  //obtiene el valor escogido
                     cambiarIdioma();
-
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
         forget.setOnClickListener(new View.OnClickListener() {

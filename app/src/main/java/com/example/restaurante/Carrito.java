@@ -30,6 +30,7 @@ public class Carrito {
         return this.carrito;
     }
     public double getFullPrice(){
+        //suma todos los precios para obtener el precio total
         double count=0.0;
         for(int i=0;i<this.carrito.size();i++){
             count+=this.carrito.get(i).precio;

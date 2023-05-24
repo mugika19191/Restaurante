@@ -49,7 +49,6 @@ public class Carta_adapter extends RecyclerView.Adapter<Carta_adapter.MyViewHold
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-
         ImageView imagen;
         TextView nombre,precio;
 
