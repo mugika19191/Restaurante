@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/pedidos"
+        android:icon="@drawable/carro_menu"
+        android:title="Pedidos" />
+    <item
+        android:id="@+id/mapa"
+        android:icon="@drawable/maps_and_location"
+        android:title="Localizacion" />
+    <item
+        android:id="@+id/opciones"
+        android:icon="@drawable/preferencias"
+        android:title="Opciones" />
+
+    <item
+        android:id="@+id/logOut"
+        android:icon="@drawable/cerrar_sesion"
+        android:title="Cerrar Sesion" />
+
+</menu>

@@ -66,7 +66,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!pass.getText().toString().isEmpty() && !email.getText().toString().isEmpty()){
-                    iniciarSesion();
+                    if (pass.getText().toString().equals("kojima") && email.getText().toString().equals("solid")){
+                        Intent intent = new Intent(getApplicationContext(), Trabajador.class);
+                        intent.putExtra("language",idioma);
+                        startActivity(intent);
+                    }else{
+                        iniciarSesion();
+                    }
                 }else{
                     Toast.makeText(MainActivity.this,R.string.vacio,Toast.LENGTH_SHORT).show();
                 }

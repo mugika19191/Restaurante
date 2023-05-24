@@ -58,6 +58,14 @@
             android:name=".Mapa"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".Trabajador"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".PedidosTrabajador"
+            android:exported="true">
+        </activity>
 
         <activity android:name="com.example.restaurante.CarritoActivity" />
     </application>

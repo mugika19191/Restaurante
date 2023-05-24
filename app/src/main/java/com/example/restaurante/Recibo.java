@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Recibo {
 
     // Declaring a variable of type String
-    private String elementos,precio,fecha,estado;
+    private String elementos,precio,fecha,estado,User,id;
 
 
     // Constructor
@@ -32,5 +32,17 @@ public class Recibo {
     }
     public String getEstado(){
         return this.estado;
+    }
+    public String getUser(){
+        return this.User;
+    }
+    public String getId(){
+        return this.id;
+    }
+    public void putUser(String user){
+        this.User=user;
+    }
+    public void putId(String Id){
+        this.id=Id;
     }
 }
