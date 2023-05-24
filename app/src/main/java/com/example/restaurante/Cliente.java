@@ -67,7 +67,7 @@ import java.util.Map;
 
 public class Cliente extends AppCompatActivity implements RecycleviewInterface, NavigationView.OnNavigationItemSelectedListener {
     Carta_adapter adapter;
-    Button pedir, logout;
+    Button logout;
     RecyclerView carta;
     ArrayList<Comida> comidaCarta;
     Carrito pedido;
@@ -75,8 +75,8 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
     DrawerLayout drawerLayout;
     View headerView;
     NavigationView navigationView;
-    ImageView iconoMen;
-    TextView tit;
+    ImageView iconoMen,pedir;
+    TextView tit,count;
 
     FusedLocationProviderClient fusedLocationProviderClient;
 
@@ -90,9 +90,9 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         comidaCarta = new ArrayList<>();
         pedido = Carrito.getInstance();
 
-        pedir = findViewById(R.id.btnPedirCliente);
-        pedir.setText(getString(R.string.carro) + "(" + pedido.getCarro().size() + ")");
-        logout = findViewById(R.id.btnLogoutCliente);
+        pedir = findViewById(R.id.iconoCarro);
+        count = findViewById(R.id.count);
+        count.setText(""+pedido.getCarro().size());
         carta = findViewById(R.id.carta);
         iconoMen = findViewById(R.id.iconoMenu);
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -101,29 +101,24 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         adapter = new Carta_adapter(this, comidaCarta, this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         cargarCarta();
-        idiomas = findViewById(R.id.spinner2);
         tit = findViewById(R.id.tvTitCliente);
         loadMenuData();
         pedir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), CarritoActivity.class));
+                Intent intent = new Intent(getApplicationContext(), CarritoActivity.class);
+                intent.putExtra("email", getIntent().getStringExtra("email"));
+                startActivity(intent);
             }
         });
 
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }
-        });
         iconoMen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-        idiomas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /*idiomas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {   //si ha escogido un idioma
@@ -136,7 +131,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });
+        });*/
 
         navigationView.setNavigationItemSelectedListener(this);
         if (ActivityCompat.checkSelfPermission(Cliente.this,
@@ -153,6 +148,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         super.onResume();
         //here...
         loadMenuData();
+        count.setText(""+pedido.getCarro().size());
     }
 
     private void cargarCarta() {
@@ -211,7 +207,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         //actividad que realizará la carta seleccionada
 
             pedido.getCarro().add(comidaCarta.get(position));
-            pedir.setText("PEDIR (" + pedido.getCarro().size() + ")");
+            count.setText(""+pedido.getCarro().size());
             Toast.makeText(Cliente.this, "Se ha añadido.", Toast.LENGTH_SHORT).show();
 
         //Toast.makeText(Cliente.this,pedido.size(),Toast.LENGTH_SHORT).show();
@@ -239,7 +235,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
     }
 
     private void actualizar() {
-        pedir.setText(getString(R.string.carro) + "(" + pedido.getCarro().size() + ")");
+        count.setText( ""+pedido.getCarro().size());
         logout.setText(R.string.salir);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.idiomas,
                 android.R.layout.simple_spinner_item);
