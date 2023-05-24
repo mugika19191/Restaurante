@@ -241,6 +241,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
     }
     private void loadCarrito(){
         String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_carro.php";
+        Carrito.getInstance().getCarro().clear();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
