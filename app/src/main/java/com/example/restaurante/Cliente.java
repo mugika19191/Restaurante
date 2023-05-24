@@ -70,6 +70,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
     Button logout;
     RecyclerView carta;
     ArrayList<Comida> comidaCarta;
+    ArrayList<String> carroTemp;
     Carrito pedido;
     Spinner idiomas;
     DrawerLayout drawerLayout;
@@ -88,6 +89,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         setContentView(R.layout.cliente);
 
         comidaCarta = new ArrayList<>();
+        carroTemp = new ArrayList<>();
         pedido = Carrito.getInstance();
 
         pedir = findViewById(R.id.iconoCarro);
@@ -141,6 +143,7 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
             ActivityCompat.requestPermissions(Cliente.this
                     , new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
+        loadCarrito();
     }
 
     @Override
@@ -194,7 +197,95 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         //carta
         comidaCarta.add(new Comida(CNombre, CImagen, precio));
     }
+    private void crearComidasCarro(String elemento) throws JSONException {
+        // crea los elementos (comida) y los adjunta en un ArrayList
 
+        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_element.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(!response.isEmpty()) {
+                    JSONObject obj;
+                    try {
+                        obj = new JSONObject(response);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        float precio = Float.parseFloat(obj.getString("precio"));
+                        Carrito.getInstance().getCarro().add(new Comida( obj.getString("nombre"),obj.getString("foto"),precio));
+                        count.setText(""+Carrito.getInstance().getCarro().size());
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Cliente.this,"Error: " + error.toString(),Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //añadir elementos para realizar la consulta
+                Map<String,String> parametros= new HashMap<String,String>();
+                parametros.put("nombre",elemento);
+                return parametros;
+            }
+        };
+        RequestQueue requestQue= Volley.newRequestQueue(this);
+        requestQue.add(stringRequest);
+
+    }
+    private void loadCarrito(){
+        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_carro.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (!response.isEmpty()){
+                    JSONArray arr = null;
+                    try {
+                        arr = new JSONArray(response);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    for (int i = 0; i < arr.length(); i++) {
+                        try {
+                            carroTemp.add(arr.getJSONObject(i).getString("elemento"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                        //list.add(arr.getJSONObject(i).getString("nombre"));
+                        //Carta_adapter adapter = new Carta_adapter(getApplicationContext(),comidaCarta,this);
+                    }
+                    for (int i=0;i<carroTemp.size();i++){
+                        try {
+                            crearComidasCarro(carroTemp.get(i));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Cliente.this, "Error: " + error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //añadir elementos para realizar la consulta
+                Map<String, String> parametros = new HashMap<String, String>();
+                parametros.put("usuario",getIntent().getStringExtra("email") );
+                return parametros;
+            }
+        };
+        RequestQueue requestQue = Volley.newRequestQueue(this);
+        requestQue.add(stringRequest);
+    }
     @Override
     public void onItemClick(int position) {
         /*Intent intent = new Intent(getApplicationContext(), ElementoSeleccionado.class);
