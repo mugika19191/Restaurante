@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 if (i != 0) {   //si ha escogido un idioma
                     idioma = adapterView.getItemAtPosition(i).toString();  //obtiene el valor escogido
                     cambiarIdioma();
+
                 }
             }
 
