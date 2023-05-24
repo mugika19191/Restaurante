@@ -19,6 +19,13 @@
         <item> en </item>
         <item> </item>
     </string-array>
+    <string-array name="idiomas2">
+        <item> eu </item>
+        <item> es </item>
+        <item> en </item>
+        <item> </item>
+    </string-array>
+    <string name="idio">Idioma</string>
     <string name="cartaTit">CARTA</string>
     <string name="carro">PEDIR </string>
     <string name="salir">CERRAR SESIÓN</string>
@@ -44,4 +51,5 @@
     <string name="fecha">Fecha</string>
     <string name="estado">Estado</string>
     <string name="desc">Descuento: 5%</string>
+    <string name="perfil">Perfil</string>
 </resources>

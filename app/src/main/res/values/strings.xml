@@ -19,6 +19,13 @@
         <item> en </item>
         <item> </item>
     </string-array>
+    <string-array name="idiomas2">
+        <item> eu </item>
+        <item> es </item>
+        <item> en </item>
+        <item> </item>
+    </string-array>
+    <string name="idio">Language</string>
     <string name="cartaTit">MENU</string>
     <string name="carro">ORDER </string>
     <string name="salir">LOG OUT</string>
@@ -44,4 +51,5 @@
     <string name="fecha">Date</string>
     <string name="estado">State</string>
     <string name="desc">Discount: 5%</string>
+    <string name="perfil">Profile</string>
 </resources>

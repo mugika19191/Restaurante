@@ -19,6 +19,13 @@
         <item> en </item>
         <item> </item>
     </string-array>
+    <string-array name="idiomas2">
+        <item> eu </item>
+        <item> es </item>
+        <item> en </item>
+        <item> </item>
+    </string-array>
+    <string name="idio">Hizkuntza</string>
     <string name="cartaTit">MENU</string>
     <string name="carro">ESKATU </string>
     <string name="salir">ITXI SAIOA</string>
@@ -44,4 +51,5 @@
     <string name="fecha">Data</string>
     <string name="estado">Egoera</string>
     <string name="desc">Beherapena: %5</string>
+    <string name="perfil">Profila</string>
 </resources>

@@ -2,7 +2,11 @@ package com.example.restaurante;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -14,8 +18,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationRequest;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Base64;
 import android.view.MenuItem;
@@ -25,9 +31,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -83,6 +92,8 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
 
     LatLng userPos;
 
+    String idioma;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +116,8 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         cargarCarta();
         tit = findViewById(R.id.tvTitCliente);
         loadMenuData();
+
+        cambiarIdioma();
         pedir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -339,7 +352,50 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         startActivity(intent);
     }
 
-    private void cambiarIdioma(String idioma) {
+    private void cambiarIdioma() {
+        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/get_user.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (!response.isEmpty()) {
+                    Toast.makeText(Cliente.this, "BBB",Toast.LENGTH_SHORT).show();
+                    JSONObject obj;
+                    try {
+                        obj = new JSONObject(response);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        idioma = obj.getString("idioma");
+                        Toast.makeText(Cliente.this, "AAA"+idioma, Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    actualizar();
+                }else{
+                    Toast.makeText(Cliente.this, "EMPTY",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Cliente.this, "Error: " + error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //añadir elementos para realizar la consulta
+                Map<String, String> parametros = new HashMap<String, String>();
+                parametros.put("email", getIntent().getStringExtra("email"));
+                return parametros;
+            }
+        };
+        RequestQueue requestQue = Volley.newRequestQueue(this);
+        requestQue.add(stringRequest);
+
+    }
+
+    private void actualizar() {
         Locale nuevaloc = new Locale(idioma);
         Locale.setDefault(nuevaloc);
         Resources resources = getBaseContext().getResources();
@@ -348,16 +404,34 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
         configuration.setLayoutDirection(nuevaloc);
         Context context = getBaseContext().createConfigurationContext(configuration);
         resources.updateConfiguration(configuration, context.getResources().getDisplayMetrics());
-        actualizar();
+        tit.setText(R.string.cartaTit);
     }
 
-    private void actualizar() {
-        count.setText( ""+pedido.getCarro().size());
-        logout.setText(R.string.salir);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.idiomas,
-                android.R.layout.simple_spinner_item);
-        idiomas.setAdapter(adapter);
-        tit.setText(R.string.cartaTit);
+    private void actualizarIdioma(String idioma1){
+        String URL = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/imugica037/WEB/restaurante_php/update_idioma.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(Cliente.this,R.string.idioAct,Toast.LENGTH_LONG).show();
+                cambiarIdioma();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Cliente.this,"Error: " + error.toString(),Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //añadir elementos para realizar la consulta
+                Map<String,String> parametros= new HashMap<String,String>();
+                parametros.put("usuario",getIntent().getStringExtra("email"));
+                parametros.put("idioma",idioma1);
+                return parametros;
+            }
+        };
+        RequestQueue requestQue= Volley.newRequestQueue(this);
+        requestQue.add(stringRequest);
     }
 
     @Override
@@ -383,9 +457,24 @@ public class Cliente extends AppCompatActivity implements RecycleviewInterface, 
                 intent.putExtra("email", getIntent().getStringExtra("email"));
                 startActivity(intent);
                 break;
+            case R.id.opciones:
+                AlertDialog.Builder builder = new AlertDialog.Builder(Cliente.this);
+                builder.setTitle(R.string.idio)
+                        .setItems(R.array.idiomas2, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                                String[] id= new String[]{"eu","es","en"};
+                                actualizarIdioma(id[which]);
+                            }
+                        });
+                builder.show();
+                break;
         }
         return true;
     }
+
+
 
     private void loadMenuData() {
         headerView = navigationView.getHeaderView(0);

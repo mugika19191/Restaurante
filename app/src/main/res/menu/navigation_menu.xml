@@ -3,7 +3,7 @@
     <item
         android:id="@+id/menuProfile"
         android:icon="@drawable/tarjeta_de_identificacion"
-        android:title="Perfil" />
+        android:title="@string/perfil" />
     <item
         android:id="@+id/pedidos"
         android:icon="@drawable/carro_menu"
